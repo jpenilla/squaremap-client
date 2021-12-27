@@ -8,7 +8,7 @@ import net.pl3x.map.fabric.Pl3xMap;
 import net.pl3x.map.fabric.duck.MapTexture;
 import net.pl3x.map.fabric.tiles.Tile;
 import net.pl3x.map.fabric.util.Image;
-import net.pl3x.map.fabric.util.World;
+import net.pl3x.map.fabric.util.WorldInfo;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -38,7 +38,7 @@ abstract class MapTextureMixin implements MapTexture {
     private byte scale;
     private int centerX;
     private int centerZ;
-    private World world;
+    private WorldInfo world;
     private boolean ready;
     private boolean skip;
 
@@ -67,7 +67,7 @@ abstract class MapTextureMixin implements MapTexture {
     }
 
     @Override
-    public void setData(byte scale, int centerX, int centerZ, World world) {
+    public void setData(byte scale, int centerX, int centerZ, WorldInfo world) {
         this.scale = scale;
         this.centerX = centerX;
         this.centerZ = centerZ;
@@ -89,7 +89,7 @@ abstract class MapTextureMixin implements MapTexture {
             for (int z = 0; z < 128; z++) {
                 int blockX = startX + (x * mod) + this.scale;
                 int blockZ = startZ + (z * mod) + this.scale;
-                Tile tile = this.pl3xmap.getTileManager().get(this.world, blockX >> 9, blockZ >> 9, this.world.getZoomMax());
+                Tile tile = this.pl3xmap.getTileManager().get(this.world, blockX >> 9, blockZ >> 9, this.world.zoomMax());
                 this.image.setPixel(x, z, tile == null ? 0 : tile.getImage().getPixel(blockX & 511, blockZ & 511));
             }
         }

@@ -13,7 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.pl3x.map.fabric.Pl3xMap;
 import net.pl3x.map.fabric.tiles.Tile;
-import net.pl3x.map.fabric.util.World;
+import net.pl3x.map.fabric.util.WorldInfo;
 
 public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry {
     private static final boolean DEBUG = false;
@@ -24,7 +24,7 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
     private final Minecraft client;
     private final int width;
     private final int height;
-    private final World world;
+    private final WorldInfo world;
 
     private double panX;
     private double panY;
@@ -43,7 +43,7 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
         this.height = height;
 
         this.world = this.pl3xmap.getWorld();
-        this.zoom = this.world.getZoomDefault();
+        this.zoom = this.world.zoomDefault();
 
         if (this.client.player != null) {
             this.offsetX = screenToWorld(-this.width / 2F, 0) + this.client.player.getBlockX();
@@ -99,7 +99,7 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
     }
 
     private void zoom(double mouseX, double mouseY, double amount) {
-        int newZoom = Math.min(Math.max(this.zoom + (amount > 0 ? 1 : -1), 0), this.world.getZoomMax() + this.world.getZoomExtra());
+        int newZoom = Math.min(Math.max(this.zoom + (amount > 0 ? 1 : -1), 0), this.world.zoomMax() + this.world.zoomExtra());
         if (newZoom == this.zoom) {
             return;
         }
@@ -136,7 +136,7 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
     }
 
     public double getScale() {
-        return (1.0D / Math.pow(2, this.world.getZoomMax() - this.zoom)) / this.client.getWindow().getGuiScale();
+        return (1.0D / Math.pow(2, this.world.zoomMax() - this.zoom)) / this.client.getWindow().getGuiScale();
     }
 
     public int getPosX(double mouseX) {
@@ -150,7 +150,7 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
     public Component getUrl() {
         return new TextComponent(String.format("%s/?world=%s&zoom=%s&x=%s&z=%s",
                 this.pl3xmap.getServerManager().getUrl(),
-                this.world.getName(),
+                this.world.name(),
                 this.zoom,
                 Math.round(getPosX(this.width / 2F)),
                 Math.round(getPosY(this.height / 2F))
@@ -164,8 +164,8 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
             return;
         }
 
-        double extra = Math.pow(2, this.zoom > this.world.getZoomMax() ? this.zoom - this.world.getZoomMax() : 0);
-        double pow = Math.pow(2, this.world.getZoomMax() - this.zoom) * extra;
+        double extra = Math.pow(2, this.zoom > this.world.zoomMax() ? this.zoom - this.world.zoomMax() : 0);
+        double pow = Math.pow(2, this.world.zoomMax() - this.zoom) * extra;
 
         double x0 = Math.round(((int) screenToWorld(0, this.offsetX) >> 9) / pow - 1);
         double y0 = Math.round(((int) screenToWorld(0, this.offsetY) >> 9) / pow - 1);
@@ -181,8 +181,8 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
 
     @Override
     public void render(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
-        double extra = Math.pow(2, this.zoom > this.world.getZoomMax() ? this.zoom - this.world.getZoomMax() : 0);
-        double pow = Math.pow(2, this.world.getZoomMax() - this.zoom) * extra;
+        double extra = Math.pow(2, this.zoom > this.world.zoomMax() ? this.zoom - this.world.zoomMax() : 0);
+        double pow = Math.pow(2, this.world.zoomMax() - this.zoom) * extra;
         double size = Tile.SIZE / this.client.getWindow().getGuiScale() * extra;
 
         matrixStack.pushPose();

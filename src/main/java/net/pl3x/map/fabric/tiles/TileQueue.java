@@ -23,7 +23,7 @@ public class TileQueue implements Runnable {
             }
             BufferedImage buffered = ImageIO.read(new URL(String.format("%s/tiles/%s/%s/%s_%s.png",
                     this.pl3xmap.getServerManager().getUrl(),
-                    this.tile.getWorld().getName(),
+                    this.tile.getWorld().name(),
                     this.tile.getZoom(),
                     this.tile.getX(),
                     this.tile.getZ()

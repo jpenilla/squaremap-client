@@ -14,7 +14,7 @@ import net.pl3x.map.fabric.Pl3xMap;
 import net.pl3x.map.fabric.tiles.Tile;
 import net.pl3x.map.fabric.tiles.TileDownloader;
 import net.pl3x.map.fabric.util.Constants;
-import net.pl3x.map.fabric.util.World;
+import net.pl3x.map.fabric.util.WorldInfo;
 
 public class TileManager {
     private final TileDownloader tileDownloader;
@@ -50,9 +50,9 @@ public class TileManager {
         }
     }
 
-    public Tile get(World world, int x, int z, int zoom) {
-        zoom = Math.min(Math.max(zoom, 0), world.getZoomMax());
-        String key = world.getName() + "." + zoom + "." + x + "." + z;
+    public Tile get(WorldInfo world, int x, int z, int zoom) {
+        zoom = Math.min(Math.max(zoom, 0), world.zoomMax());
+        String key = world.name() + "." + zoom + "." + x + "." + z;
         synchronized (lock) {
             Tile tile = this.tiles.get(key);
             if (tile == null) {
@@ -64,7 +64,7 @@ public class TileManager {
         }
     }
 
-    public Tile loadTile(World world, int x, int z, int zoom) {
+    public Tile loadTile(WorldInfo world, int x, int z, int zoom) {
         Tile tile = new Tile(world, x, z, zoom);
         File file = tile.getFile();
         if (!file.exists()) {

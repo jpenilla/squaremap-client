@@ -336,7 +336,7 @@ public class MiniMap {
                     for (z = 0; z < MAP_SIZE; z++) {
                         blockX = startX + x;
                         blockZ = startZ + z;
-                        this.tile = this.pl3xmap.getTileManager().get(this.pl3xmap.getWorld(), blockX >> 9, blockZ >> 9, this.pl3xmap.getWorld().getZoomMax());
+                        this.tile = this.pl3xmap.getTileManager().get(this.pl3xmap.getWorld(), blockX >> 9, blockZ >> 9, this.pl3xmap.getWorld().zoomMax());
                         this.image.setPixel(x, z, this.tile == null ? 0 : this.tile.getImage().getPixel(blockX & 511, blockZ & 511));
                         this.mapTexture.getPixels().setPixelRGBA(x, z, this.image.getPixel(x, z));
                     }

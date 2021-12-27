@@ -14,7 +14,7 @@ import net.pl3x.map.fabric.configuration.Lang;
 import net.pl3x.map.fabric.duck.MapTexture;
 import net.pl3x.map.fabric.mixin.MapRendererAccess;
 import net.pl3x.map.fabric.util.Constants;
-import net.pl3x.map.fabric.util.World;
+import net.pl3x.map.fabric.util.WorldInfo;
 
 public class NetworkManager {
     private final ResourceLocation channel = new ResourceLocation(Constants.MODID, Constants.MODID);
@@ -43,7 +43,7 @@ public class NetworkManager {
                         return;
                     }
                     UUID uuid = UUID.fromString(packet.readUTF());
-                    World world = this.pl3xmap.getServerManager().getWorld(uuid);
+                    WorldInfo world = this.pl3xmap.getServerManager().getWorld(uuid);
                     this.pl3xmap.setWorld(world);
                     if (world != null && this.pl3xmap.getConfig().getMinimap().getEnabled()) {
                         this.pl3xmap.getMiniMap().enable();
@@ -65,7 +65,7 @@ public class NetworkManager {
                             int x = packet.readInt();
                             int z = packet.readInt();
                             UUID uuid = UUID.fromString(packet.readUTF());
-                            World world = this.pl3xmap.getServerManager().getWorld(uuid);
+                            WorldInfo world = this.pl3xmap.getServerManager().getWorld(uuid);
                             MapTexture texture = (MapTexture) ((MapRendererAccess)Minecraft.getInstance().gameRenderer.getMapRenderer()).maps().get(id);
                             if (world != null && texture != null) {
                                 texture.setData(scale, x, z, world);

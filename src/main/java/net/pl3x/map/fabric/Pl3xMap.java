@@ -13,7 +13,7 @@ import net.pl3x.map.fabric.manager.TextureManager;
 import net.pl3x.map.fabric.manager.TileManager;
 import net.pl3x.map.fabric.mixin.MapRendererAccess;
 import net.pl3x.map.fabric.scheduler.Scheduler;
-import net.pl3x.map.fabric.util.World;
+import net.pl3x.map.fabric.util.WorldInfo;
 
 public class Pl3xMap implements ClientModInitializer {
     private static Pl3xMap instance;
@@ -35,7 +35,7 @@ public class Pl3xMap implements ClientModInitializer {
     private final MiniMap minimap;
 
     private boolean rendererEnabled;
-    private World world;
+    private WorldInfo world;
 
     public Pl3xMap() {
         instance = this;
@@ -148,11 +148,11 @@ public class Pl3xMap implements ClientModInitializer {
         return this.minimap;
     }
 
-    public World getWorld() {
+    public WorldInfo getWorld() {
         return this.world;
     }
 
-    public void setWorld(World world) {
+    public void setWorld(WorldInfo world) {
         this.world = world;
     }
 }

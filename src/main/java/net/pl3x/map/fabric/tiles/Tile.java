@@ -11,12 +11,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.pl3x.map.fabric.Pl3xMap;
 import net.pl3x.map.fabric.util.Constants;
 import net.pl3x.map.fabric.util.Image;
-import net.pl3x.map.fabric.util.World;
+import net.pl3x.map.fabric.util.WorldInfo;
 
 public class Tile {
     public static final int SIZE = 512;
 
-    private final World world;
+    private final WorldInfo world;
     private final int x;
     private final int z;
     private final int zoom;
@@ -28,7 +28,7 @@ public class Tile {
 
     private long lastUsed;
 
-    public Tile(World world, int x, int z, int zoom) {
+    public Tile(WorldInfo world, int x, int z, int zoom) {
         this.world = world;
         this.x = x;
         this.z = z;
@@ -36,7 +36,7 @@ public class Tile {
         this.image = new Image(SIZE);
         updateLastUsed();
 
-        this.identifier = new ResourceLocation(Constants.MODID, world.getName().toLowerCase(Locale.ROOT) + "." + zoom + "." + x + "." + z);
+        this.identifier = new ResourceLocation(Constants.MODID, world.name().toLowerCase(Locale.ROOT) + "." + zoom + "." + x + "." + z);
 
         initTexture();
     }
@@ -52,7 +52,7 @@ public class Tile {
         }
     }
 
-    public World getWorld() {
+    public WorldInfo getWorld() {
         return this.world;
     }
 
@@ -131,7 +131,7 @@ public class Tile {
     }
 
     public File getFile() {
-        File dir = new File(new File(new File(Constants.MODID, ip().replace(":", "-").toLowerCase(Locale.ROOT)), this.world.getName()), String.valueOf(this.zoom));
+        File dir = new File(new File(new File(Constants.MODID, ip().replace(":", "-").toLowerCase(Locale.ROOT)), this.world.name()), String.valueOf(this.zoom));
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
                 throw new IllegalStateException("Cannot create tiles directory for " + this.world + " Directory: " + dir.getAbsolutePath());

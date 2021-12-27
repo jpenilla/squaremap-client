@@ -7,11 +7,11 @@ import java.util.UUID;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.pl3x.map.fabric.Pl3xMap;
 import net.pl3x.map.fabric.util.Constants;
-import net.pl3x.map.fabric.util.World;
+import net.pl3x.map.fabric.util.WorldInfo;
 
 public class ServerManager {
     private final Pl3xMap pl3xmap;
-    private final Map<UUID, World> worlds = new HashMap<>();
+    private final Map<UUID, WorldInfo> worlds = new HashMap<>();
 
     private boolean isOnServer;
     private String url;
@@ -57,7 +57,7 @@ public class ServerManager {
         return url;
     }
 
-    public World getWorld(UUID uuid) {
+    public WorldInfo getWorld(UUID uuid) {
         return this.worlds.get(uuid);
     }
 
@@ -74,7 +74,7 @@ public class ServerManager {
             int zoomMax = packet.readInt();
             int zoomDefault = packet.readInt();
             int zoomExtra = packet.readInt();
-            this.worlds.put(uuid, new World(uuid, name, zoomMax, zoomDefault, zoomExtra));
+            this.worlds.put(uuid, new WorldInfo(uuid, name, zoomMax, zoomDefault, zoomExtra));
         }
         UUID uuid = UUID.fromString(packet.readUTF());
         this.pl3xmap.setWorld(this.worlds.get(uuid));

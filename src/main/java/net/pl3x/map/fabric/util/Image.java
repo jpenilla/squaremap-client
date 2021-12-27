@@ -1,6 +1,6 @@
 package net.pl3x.map.fabric.util;
 
-public class Image {
+public final class Image {
     private final int[][] pixels;
 
     public Image(int size) {
