@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MapRenderer.MapInstance.class)
-abstract class MapTextureMixin implements MapTexture {
+abstract class MapInstanceMixin implements MapTexture {
 
     // todo: no idea why the refmap isn't being generated for these shadows
 
