@@ -1,13 +1,14 @@
 package net.pl3x.map.fabric.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
+import java.util.concurrent.CompletableFuture;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.texture.NativeImageBackedTexture;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.pl3x.map.fabric.Pl3xMap;
 import net.pl3x.map.fabric.configuration.MiniMapConfig;
 import net.pl3x.map.fabric.manager.TextureManager;
@@ -16,23 +17,21 @@ import net.pl3x.map.fabric.tiles.Tile;
 import net.pl3x.map.fabric.util.Image;
 import org.lwjgl.opengl.GL11;
 
-import java.util.concurrent.CompletableFuture;
-
 public class MiniMap {
     private final static int MAP_SIZE = 512;
 
     private final Pl3xMap pl3xmap;
-    private final MinecraftClient client;
+    private final Minecraft client;
 
     private boolean enabled;
     private boolean visible;
 
-    private ClientPlayerEntity player;
+    private LocalPlayer player;
 
     private int windowWidth;
     private int windowHeight;
 
-    private NativeImageBackedTexture mapTexture;
+    private DynamicTexture mapTexture;
     private final Image image = new Image(MAP_SIZE);
 
     private int textX;
@@ -75,7 +74,7 @@ public class MiniMap {
 
     public MiniMap(Pl3xMap pl3xmap) {
         this.pl3xmap = pl3xmap;
-        this.client = MinecraftClient.getInstance();
+        this.client = Minecraft.getInstance();
     }
 
     public void initialize() {
@@ -83,7 +82,7 @@ public class MiniMap {
             if (!this.enabled || !this.visible) {
                 return;
             }
-            if (this.client.options.debugEnabled) {
+            if (this.client.options.renderDebug) {
                 return;
             }
             // do not show minimap if no pl3x world set
@@ -98,6 +97,14 @@ public class MiniMap {
         return this.enabled;
     }
 
+    public void toggle() {
+        if (this.isEnabled()) {
+            this.disable();
+        } else {
+            this.enable();
+        }
+    }
+
     public void enable() {
         if (!RenderSystem.isOnRenderThread()) {
             RenderSystem.recordRenderCall(this::enable);
@@ -109,12 +116,12 @@ public class MiniMap {
 
         this.player = this.client.player;
 
-        this.windowWidth = this.client.getWindow().getScaledWidth();
-        this.windowHeight = this.client.getWindow().getScaledHeight();
+        this.windowWidth = this.client.getWindow().getGuiScaledWidth();
+        this.windowHeight = this.client.getWindow().getGuiScaledHeight();
 
         if (this.mapTexture == null) {
-            this.mapTexture = new NativeImageBackedTexture(MAP_SIZE, MAP_SIZE, true);
-            this.client.getTextureManager().registerTexture(TextureManager.MAP, this.mapTexture);
+            this.mapTexture = new DynamicTexture(MAP_SIZE, MAP_SIZE, true);
+            this.client.getTextureManager().register(TextureManager.MAP, this.mapTexture);
         }
 
         MiniMapConfig config = this.pl3xmap.getConfig().getMinimap();
@@ -279,8 +286,8 @@ public class MiniMap {
     }
 
     public void checkWindowResize() {
-        int width = this.client.getWindow().getScaledWidth();
-        int height = this.client.getWindow().getScaledHeight();
+        int width = this.client.getWindow().getGuiScaledWidth();
+        int height = this.client.getWindow().getGuiScaledHeight();
         boolean update = false;
         int x = this.centerX;
         int z = this.centerZ;
@@ -316,7 +323,7 @@ public class MiniMap {
         if (this.pl3xmap.getWorld() == null) {
             return;
         }
-        if (this.mapTexture.getImage() == null) {
+        if (this.mapTexture.getPixels() == null) {
             return;
         }
         CompletableFuture.runAsync(() -> {
@@ -331,7 +338,7 @@ public class MiniMap {
                         blockZ = startZ + z;
                         this.tile = this.pl3xmap.getTileManager().get(this.pl3xmap.getWorld(), blockX >> 9, blockZ >> 9, this.pl3xmap.getWorld().getZoomMax());
                         this.image.setPixel(x, z, this.tile == null ? 0 : this.tile.getImage().getPixel(blockX & 511, blockZ & 511));
-                        this.mapTexture.getImage().setColor(x, z, this.image.getPixel(x, z));
+                        this.mapTexture.getPixels().setPixelRGBA(x, z, this.image.getPixel(x, z));
                     }
                 }
                 this.mapTexture.upload();
@@ -351,14 +358,14 @@ public class MiniMap {
         });
     }
 
-    public void render(MatrixStack matrixStack, float delta) {
+    public void render(PoseStack matrixStack, float delta) {
         TextureManager tex = this.pl3xmap.getTextureManager();
 
         // get fresh reference to player since vanilla destroys this object on dimension change
         this.player = this.client.player;
 
         // setup opengl stuff - this ensures we draw how we expect in case another mod left without cleaning up
-        matrixStack.push();
+        matrixStack.pushPose();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
@@ -366,7 +373,7 @@ public class MiniMap {
         // tuck it behind chat/hotbar
         matrixStack.translate(0.0D, 0.0D, -999.9D);
 
-        tickDeltaZoom(this.client.getLastFrameDuration());
+        tickDeltaZoom(this.client.getDeltaFrameTime());
 
         // setup texture size stuff - most of this is used multiple times so these act like a "cache" for this frame
         float zoomDelta = this.deltaZoom; // things happen so fast this can change a few lines apart here
@@ -383,7 +390,7 @@ public class MiniMap {
         float v2 = 1.0F - u2;
 
         // we only allow rotating if _not_ north locked and _not_ circular
-        float angle = (this.player.getYaw(delta) - 180.0F) % 360.0F;
+        float angle = (this.player.getViewYRot(delta) - 180.0F) % 360.0F;
 
         // draw mask - uses special blend which writes to the alpha channel where black pixels exist.
         // the mask is twice as large as the map texture and the black pixels are the map size.
@@ -392,20 +399,20 @@ public class MiniMap {
         RenderSystem.blendFuncSeparate(GL11.GL_ZERO, GL11.GL_ONE, GL11.GL_SRC_COLOR, GL11.GL_ZERO);
         {
             RenderSystem.setShaderTexture(0, this.circular ? TextureManager.MASK_CIRCLE : TextureManager.MASK_SQUARE);
-            DrawableHelper.drawTexture(matrixStack, this.left - this.halfSize, this.top - this.halfSize, 0, 0, 0, this.doubleSize, this.doubleSize, this.doubleSize, this.doubleSize);
+            GuiComponent.blit(matrixStack, this.left - this.halfSize, this.top - this.halfSize, 0, 0, 0, this.doubleSize, this.doubleSize, this.doubleSize, this.doubleSize);
         }
 
         // draw sky background - uses special blend which only writes where high alpha values exist from above
         RenderSystem.blendFunc(GL11.GL_DST_ALPHA, GL11.GL_ONE_MINUS_DST_ALPHA);
         {
-            matrixStack.push();
-            tex.drawTexture(matrixStack, tex.getTexture(this.player.world), x0 - halfScale, y0 + halfScale, x1 - halfScale, y1 + halfScale, u2, v2);
-            matrixStack.pop();
+            matrixStack.pushPose();
+            tex.drawTexture(matrixStack, tex.getTexture(this.player.level), x0 - halfScale, y0 + halfScale, x1 - halfScale, y1 + halfScale, u2, v2);
+            matrixStack.popPose();
         }
 
         // draw map - still using special blend from above
         {
-            matrixStack.push();
+            matrixStack.pushPose();
             if (!this.northLocked) {
                 if (!this.circular) {
                     // scale square map to hide missing pixels in corners
@@ -416,7 +423,7 @@ public class MiniMap {
                 rotateScene(matrixStack, this.centerX, this.centerZ, -angle);
             }
             tex.drawTexture(matrixStack, TextureManager.MAP, x0 - halfScale, y0 + halfScale, x1 - halfScale, y1 + halfScale, u, v);
-            matrixStack.pop();
+            matrixStack.popPose();
         }
 
         // use a special blend that supports translucent pixels for the remaining textures
@@ -424,19 +431,19 @@ public class MiniMap {
 
         // draw self marker
         {
-            matrixStack.push();
+            matrixStack.pushPose();
             if (this.northLocked) {
                 // only allow rotating if map is not rotating or if northlocked
                 rotateScene(matrixStack, this.centerX, this.centerZ, angle);
             }
             tex.drawTexture(matrixStack, TextureManager.SELF, x0 + markerOffset, y0, x1 + markerOffset, y1, u2, v2);
-            matrixStack.pop();
+            matrixStack.popPose();
         }
 
         // draw the frame
         if (this.showFrame) {
             RenderSystem.setShaderTexture(0, this.circular ? TextureManager.FRAME_CIRCLE : TextureManager.FRAME_SQUARE);
-            DrawableHelper.drawTexture(matrixStack, this.left, this.top, 0, 0, 0, this.size, this.size, this.size, this.size);
+            GuiComponent.blit(matrixStack, this.left, this.top, 0, 0, 0, this.size, this.size, this.size, this.size);
         }
 
         // draw cardinal directions
@@ -450,52 +457,52 @@ public class MiniMap {
                     distance /= cos(45.0F - Math.abs(45.0F + (-Math.abs(angle2) % 90.0F)));
                 }
             }
-            matrixStack.push();
+            matrixStack.pushPose();
             matrixStack.scale(this.textScale, this.textScale, this.textScale);
             {
-                matrixStack.push();
+                matrixStack.pushPose();
                 matrixStack.translate(distance * sin(angle2 - 180), distance * cos(angle2 - 180), 0);
                 text(matrixStack, "N", dirX, dirY);
-                matrixStack.pop();
-                matrixStack.push();
+                matrixStack.popPose();
+                matrixStack.pushPose();
                 matrixStack.translate(distance * sin(angle2 + 90), distance * cos(angle2 + 90), 0);
                 text(matrixStack, "E", dirX, dirY);
-                matrixStack.pop();
-                matrixStack.push();
+                matrixStack.popPose();
+                matrixStack.pushPose();
                 matrixStack.translate(distance * sin(angle2), distance * cos(angle2), 0);
                 text(matrixStack, "S", dirX, dirY);
-                matrixStack.pop();
-                matrixStack.push();
+                matrixStack.popPose();
+                matrixStack.pushPose();
                 matrixStack.translate(distance * sin(angle2 - 90), distance * cos(angle2 - 90), 0);
                 text(matrixStack, "W", dirX, dirY);
-                matrixStack.pop();
+                matrixStack.popPose();
             }
-            matrixStack.pop();
+            matrixStack.popPose();
         }
 
         // draw coordinates
         if (this.showCoordinates) {
-            matrixStack.push();
+            matrixStack.pushPose();
             matrixStack.scale(this.textScale, this.textScale, this.textScale);
             text(matrixStack, String.format("%s, %s, %s", (int) Math.floor(this.player.getX()), (int) Math.floor(this.player.getY()), (int) Math.floor(this.player.getZ())), this.textX, this.textZ + 8);
-            matrixStack.pop();
+            matrixStack.popPose();
         }
 
         // done
         RenderSystem.disableDepthTest();
         RenderSystem.disableBlend();
-        matrixStack.pop();
+        matrixStack.popPose();
     }
 
-    private void text(MatrixStack matrixStack, String text, int x, int y) {
-        x -= (int) (this.client.textRenderer.getWidth(text) / 2F);
-        this.client.textRenderer.draw(matrixStack, text, x + 1, y + 1, 0xFF3F3F3F);
-        this.client.textRenderer.draw(matrixStack, text, x, y, 0xFFFFFFFF);
+    private void text(PoseStack matrixStack, String text, int x, int y) {
+        x -= (int) (this.client.font.width(text) / 2F);
+        this.client.font.draw(matrixStack, text, x + 1, y + 1, 0xFF3F3F3F);
+        this.client.font.draw(matrixStack, text, x, y, 0xFFFFFFFF);
     }
 
-    private void rotateScene(MatrixStack matrixStack, int x, int y, float degrees) {
+    private void rotateScene(PoseStack matrixStack, int x, int y, float degrees) {
         matrixStack.translate(x, y, 0);
-        matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(degrees));
+        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(degrees));
         matrixStack.translate(-x, -y, 0);
     }
 

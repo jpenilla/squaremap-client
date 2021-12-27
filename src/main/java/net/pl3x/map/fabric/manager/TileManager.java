@@ -1,12 +1,5 @@
 package net.pl3x.map.fabric.manager;
 
-import net.pl3x.map.fabric.Pl3xMap;
-import net.pl3x.map.fabric.tiles.Tile;
-import net.pl3x.map.fabric.tiles.TileDownloader;
-import net.pl3x.map.fabric.util.Constants;
-import net.pl3x.map.fabric.util.World;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +9,12 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CompletableFuture;
+import javax.imageio.ImageIO;
+import net.pl3x.map.fabric.Pl3xMap;
+import net.pl3x.map.fabric.tiles.Tile;
+import net.pl3x.map.fabric.tiles.TileDownloader;
+import net.pl3x.map.fabric.util.Constants;
+import net.pl3x.map.fabric.util.World;
 
 public class TileManager {
     private final TileDownloader tileDownloader;

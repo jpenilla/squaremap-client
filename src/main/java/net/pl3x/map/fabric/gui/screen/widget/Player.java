@@ -1,22 +1,22 @@
 package net.pl3x.map.fabric.gui.screen.widget;
 
-import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.util.math.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 
-public class Player implements Drawable, Element, Selectable {
+public class Player implements Widget, GuiEventListener, NarratableEntry {
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
     }
 
     @Override
-    public SelectionType getType() {
-        return SelectionType.NONE;
+    public NarrationPriority narrationPriority() {
+        return NarrationPriority.NONE;
     }
 
     @Override
-    public void appendNarrations(NarrationMessageBuilder builder) {
+    public void updateNarration(NarrationElementOutput builder) {
     }
 }

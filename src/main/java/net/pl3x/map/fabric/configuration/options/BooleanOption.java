@@ -1,15 +1,15 @@
 package net.pl3x.map.fabric.configuration.options;
 
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import net.pl3x.map.fabric.gui.screen.widget.Button;
 
 public class BooleanOption implements Option<Boolean> {
-    private final Text name;
-    private final Text tooltip;
+    private final Component name;
+    private final Component tooltip;
     private final Getter getter;
     private final Setter setter;
 
-    public BooleanOption(Text name, Text tooltip, Getter getter, Setter setter) {
+    public BooleanOption(Component name, Component tooltip, Getter getter, Setter setter) {
         this.name = name;
         this.tooltip = tooltip;
         this.getter = getter;
@@ -17,12 +17,12 @@ public class BooleanOption implements Option<Boolean> {
     }
 
     @Override
-    public Text getName() {
+    public Component getName() {
         return this.name;
     }
 
     @Override
-    public Text tooltip() {
+    public Component tooltip() {
         return this.tooltip;
     }
 

@@ -1,6 +1,6 @@
 package net.pl3x.map.fabric.configuration.options;
 
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import net.pl3x.map.fabric.gui.screen.widget.Button;
 
 public interface Option<T> {
@@ -10,7 +10,7 @@ public interface Option<T> {
 
     Button.PressAction onPress();
 
-    Text getName();
+    Component getName();
 
-    Text tooltip();
+    Component tooltip();
 }

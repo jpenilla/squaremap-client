@@ -1,10 +1,9 @@
 package net.pl3x.map.fabric.scheduler;
 
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
 public class Scheduler {
     private final List<Task> tasks = new ArrayList<>();

@@ -1,14 +1,13 @@
 package net.pl3x.map.fabric.manager;
 
 import com.google.common.io.ByteArrayDataInput;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.pl3x.map.fabric.Pl3xMap;
 import net.pl3x.map.fabric.util.Constants;
 import net.pl3x.map.fabric.util.World;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 public class ServerManager {
     private final Pl3xMap pl3xmap;
@@ -23,13 +22,13 @@ public class ServerManager {
 
     public void initialize() {
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-            if (!client.isInSingleplayer()) {
+            if (!client.isLocalServer()) {
                 this.pl3xmap.enable();
             }
         });
 
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-            if (!client.isInSingleplayer()) {
+            if (!client.isLocalServer()) {
                 this.pl3xmap.getServerManager().disable();
                 this.pl3xmap.getTileManager().disable();
                 this.pl3xmap.getMiniMap().disable();

@@ -1,19 +1,18 @@
 package net.pl3x.map.fabric.gui.screen.widget;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.gui.widget.PressableWidget;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.OrderedText;
-import net.minecraft.text.Text;
+import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.FormattedCharSequence;
 import net.pl3x.map.fabric.configuration.options.BooleanOption;
 
-import java.util.List;
-
-public class Button extends PressableWidget implements Tickable {
+public class Button extends AbstractButton implements Tickable {
     private final Screen screen;
-    private final Text tooltip;
+    private final Component tooltip;
     private final PressAction onPress;
     private final BooleanOption option;
     private int tooltipDelay;
@@ -22,11 +21,11 @@ public class Button extends PressableWidget implements Tickable {
         this(screen, x, y, width, height, option.getName(), option.tooltip(), option.onPress(), option);
     }
 
-    public Button(Screen screen, int x, int y, int width, int height, Text name, Text tooltip, PressAction onPress) {
+    public Button(Screen screen, int x, int y, int width, int height, Component name, Component tooltip, PressAction onPress) {
         this(screen, x, y, width, height, name, tooltip, onPress, null);
     }
 
-    public Button(Screen screen, int x, int y, int width, int height, Text name, Text tooltip, PressAction onPress, BooleanOption option) {
+    public Button(Screen screen, int x, int y, int width, int height, Component name, Component tooltip, PressAction onPress, BooleanOption option) {
         super(x, y, width, height, name);
         this.screen = screen;
         this.tooltip = tooltip;
@@ -42,16 +41,16 @@ public class Button extends PressableWidget implements Tickable {
     }
 
     @Override
-    public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float delta) {
+    public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
         super.renderButton(matrixStack, mouseX, mouseY, delta);
-        if (this.isHovered() && this.tooltipDelay > 10) {
-            this.renderTooltip(matrixStack, mouseX, mouseY);
+        if (this.isHoveredOrFocused() && this.tooltipDelay > 10) {
+            this.renderToolTip(matrixStack, mouseX, mouseY);
         }
     }
 
     @Override
     public void tick() {
-        if (this.isHovered() && this.active) {
+        if (this.isHoveredOrFocused() && this.active) {
             this.tooltipDelay++;
         } else if (this.tooltipDelay > 0) {
             this.tooltipDelay = 0;
@@ -59,19 +58,19 @@ public class Button extends PressableWidget implements Tickable {
     }
 
     @Override
-    public void renderTooltip(MatrixStack matrixStack, int mouseX, int mouseY) {
-        List<OrderedText> tooltip = MinecraftClient.getInstance().textRenderer.wrapLines(this.tooltip, 150);
-        this.screen.renderOrderedTooltip(matrixStack, tooltip, mouseX, mouseY);
+    public void renderToolTip(PoseStack matrixStack, int mouseX, int mouseY) {
+        List<FormattedCharSequence> tooltip = Minecraft.getInstance().font.split(this.tooltip, 150);
+        this.screen.renderTooltip(matrixStack, tooltip, mouseX, mouseY);
     }
 
     @Override
-    public void appendNarrations(NarrationMessageBuilder builder) {
-        this.appendDefaultNarrations(builder);
+    public void updateNarration(NarrationElementOutput builder) {
+        this.defaultButtonNarrationText(builder);
     }
 
     public void updateMessage() {
         if (this.option != null) {
-            setMessage(Text.of(this.option.getName().getString() + ": " + getStringValue()));
+            setMessage(Component.nullToEmpty(this.option.getName().getString() + ": " + getStringValue()));
         }
     }
 

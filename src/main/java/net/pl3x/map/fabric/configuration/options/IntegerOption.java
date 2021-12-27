@@ -1,17 +1,17 @@
 package net.pl3x.map.fabric.configuration.options;
 
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import net.pl3x.map.fabric.gui.screen.widget.Button;
 
 public class IntegerOption implements Option<Integer> {
-    private final Text name;
-    private final Text tooltip;
+    private final Component name;
+    private final Component tooltip;
     private final Getter getter;
     private final Setter setter;
     private final int min;
     private final int max;
 
-    public IntegerOption(Text name, Text tooltip, int min, int max, Getter getter, Setter setter) {
+    public IntegerOption(Component name, Component tooltip, int min, int max, Getter getter, Setter setter) {
         this.name = name;
         this.tooltip = tooltip;
         this.min = min;
@@ -21,12 +21,12 @@ public class IntegerOption implements Option<Integer> {
     }
 
     @Override
-    public Text getName() {
+    public Component getName() {
         return this.name;
     }
 
     @Override
-    public Text tooltip() {
+    public Component tooltip() {
         return this.tooltip;
     }
 

@@ -1,15 +1,15 @@
 package net.pl3x.map.fabric.mixin;
 
-import net.minecraft.client.toast.Toast;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.components.toasts.Toast;
+import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(Toast.class)
-public interface ToastAccessor {
+public interface ToastAccess {
 
     @Accessor("TEXTURE")
-    static Identifier accessTEXTURE() {
+    static ResourceLocation texture() {
         throw new AssertionError();
     }
 

@@ -1,12 +1,12 @@
 package net.pl3x.map.fabric.gui.screen.widget;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.util.math.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.Screen;
 import net.pl3x.map.fabric.gui.MiniMap;
 
-public class MiniMapWidget extends ClickableWidget {
+public class MiniMapWidget extends AbstractWidget {
     private final MiniMap minimap;
 
     private int clickX;
@@ -18,8 +18,8 @@ public class MiniMapWidget extends ClickableWidget {
     }
 
     @Override
-    public void appendNarrations(NarrationMessageBuilder builder) {
-        this.appendDefaultNarrations(builder);
+    public void updateNarration(NarrationElementOutput builder) {
+        this.defaultButtonNarrationText(builder);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class MiniMapWidget extends ClickableWidget {
     }
 
     @Override
-    public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float delta) {
+    public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
         this.minimap.render(matrixStack, delta);
     }
 

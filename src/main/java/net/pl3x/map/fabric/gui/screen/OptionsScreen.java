@@ -1,12 +1,13 @@
 package net.pl3x.map.fabric.gui.screen;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ScreenTexts;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.List;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.pl3x.map.fabric.Pl3xMap;
 import net.pl3x.map.fabric.configuration.options.BooleanOption;
 import net.pl3x.map.fabric.configuration.options.IntegerOption;
@@ -14,39 +15,37 @@ import net.pl3x.map.fabric.gui.screen.widget.Button;
 import net.pl3x.map.fabric.gui.screen.widget.Slider;
 import net.pl3x.map.fabric.gui.screen.widget.Tickable;
 
-import java.util.List;
-
 public class OptionsScreen extends AbstractScreen {
-    private List<ClickableWidget> options;
-    private static final String RENDERER = I18n.translate("pl3xmap.screen.options.renderer.title");
-    private static final String MINIMAP = I18n.translate("pl3xmap.screen.options.minimap.title");
+    private List<AbstractWidget> options;
+    private static final String RENDERER = I18n.get("pl3xmap.screen.options.renderer.title");
+    private static final String MINIMAP = I18n.get("pl3xmap.screen.options.minimap.title");
 
-    private static final Text RENDERER_ENABLED = new TranslatableText("pl3xmap.screen.options.renderer.enabled");
-    private static final Text RENDERER_ENABLED_TOOLTIP = new TranslatableText("pl3xmap.screen.options.renderer.enabled.tooltip");
-    private static final Text FOG_OF_WAR = new TranslatableText("pl3xmap.screen.options.renderer.fog-of-war");
-    private static final Text FOG_OF_WAR_TOOLTIP = new TranslatableText("pl3xmap.screen.options.renderer.fog-of-war.tooltip");
-    private static final Text MINIMAP_ENABLED = new TranslatableText("pl3xmap.screen.options.minimap.enabled");
-    private static final Text MINIMAP_ENABLED_TOOLTIP = new TranslatableText("pl3xmap.screen.options.minimap.enabled.tooltip");
-    private static final Text NORTH_LOCKED = new TranslatableText("pl3xmap.screen.options.minimap.north-locked");
-    private static final Text NORTH_LOCKED_TOOLTIP = new TranslatableText("pl3xmap.screen.options.minimap.north-locked.tooltip");
-    private static final Text FRAME = new TranslatableText("pl3xmap.screen.options.minimap.frame");
-    private static final Text FRAME_TOOLTIP = new TranslatableText("pl3xmap.screen.options.minimap.frame.tooltip");
-    private static final Text CIRCULAR = new TranslatableText("pl3xmap.screen.options.minimap.circular");
-    private static final Text CIRCULAR_TOOLTIP = new TranslatableText("pl3xmap.screen.options.minimap.circular.tooltip");
-    private static final Text DIRECTIONS = new TranslatableText("pl3xmap.screen.options.minimap.directions");
-    private static final Text DIRECTIONS_TOOLTIP = new TranslatableText("pl3xmap.screen.options.minimap.directions.tooltip");
-    private static final Text COORDINATES = new TranslatableText("pl3xmap.screen.options.minimap.coordinates");
-    private static final Text COORDINATES_TOOLTIP = new TranslatableText("pl3xmap.screen.options.minimap.coordinates.tooltip");
-    private static final Text UPDATE_INTERVAL = new TranslatableText("pl3xmap.screen.options.minimap.update-interval");
-    private static final Text UPDATE_INTERVAL_TOOLTIP = new TranslatableText("pl3xmap.screen.options.minimap.update-interval.tooltip");
-    private static final Text POSITION_SIZE_ZOOM = new TranslatableText("pl3xmap.screen.options.minimap.position-size-zoom");
-    private static final Text POSITION_SIZE_ZOOM_TOOLTIP = new TranslatableText("pl3xmap.screen.options.minimap.position-size-zoom.tooltip");
-    private static final Text POSITION_SIZE_ZOOM_ERROR = new TranslatableText("pl3xmap.screen.options.minimap.position-size-zoom.error");
+    private static final Component RENDERER_ENABLED = new TranslatableComponent("pl3xmap.screen.options.renderer.enabled");
+    private static final Component RENDERER_ENABLED_TOOLTIP = new TranslatableComponent("pl3xmap.screen.options.renderer.enabled.tooltip");
+    private static final Component FOG_OF_WAR = new TranslatableComponent("pl3xmap.screen.options.renderer.fog-of-war");
+    private static final Component FOG_OF_WAR_TOOLTIP = new TranslatableComponent("pl3xmap.screen.options.renderer.fog-of-war.tooltip");
+    private static final Component MINIMAP_ENABLED = new TranslatableComponent("pl3xmap.screen.options.minimap.enabled");
+    private static final Component MINIMAP_ENABLED_TOOLTIP = new TranslatableComponent("pl3xmap.screen.options.minimap.enabled.tooltip");
+    private static final Component NORTH_LOCKED = new TranslatableComponent("pl3xmap.screen.options.minimap.north-locked");
+    private static final Component NORTH_LOCKED_TOOLTIP = new TranslatableComponent("pl3xmap.screen.options.minimap.north-locked.tooltip");
+    private static final Component FRAME = new TranslatableComponent("pl3xmap.screen.options.minimap.frame");
+    private static final Component FRAME_TOOLTIP = new TranslatableComponent("pl3xmap.screen.options.minimap.frame.tooltip");
+    private static final Component CIRCULAR = new TranslatableComponent("pl3xmap.screen.options.minimap.circular");
+    private static final Component CIRCULAR_TOOLTIP = new TranslatableComponent("pl3xmap.screen.options.minimap.circular.tooltip");
+    private static final Component DIRECTIONS = new TranslatableComponent("pl3xmap.screen.options.minimap.directions");
+    private static final Component DIRECTIONS_TOOLTIP = new TranslatableComponent("pl3xmap.screen.options.minimap.directions.tooltip");
+    private static final Component COORDINATES = new TranslatableComponent("pl3xmap.screen.options.minimap.coordinates");
+    private static final Component COORDINATES_TOOLTIP = new TranslatableComponent("pl3xmap.screen.options.minimap.coordinates.tooltip");
+    private static final Component UPDATE_INTERVAL = new TranslatableComponent("pl3xmap.screen.options.minimap.update-interval");
+    private static final Component UPDATE_INTERVAL_TOOLTIP = new TranslatableComponent("pl3xmap.screen.options.minimap.update-interval.tooltip");
+    private static final Component POSITION_SIZE_ZOOM = new TranslatableComponent("pl3xmap.screen.options.minimap.position-size-zoom");
+    private static final Component POSITION_SIZE_ZOOM_TOOLTIP = new TranslatableComponent("pl3xmap.screen.options.minimap.position-size-zoom.tooltip");
+    private static final Component POSITION_SIZE_ZOOM_ERROR = new TranslatableComponent("pl3xmap.screen.options.minimap.position-size-zoom.error");
 
-    private static final String ON = "§a" + ScreenTexts.ON.getString();
-    private static final String OFF = "§c" + ScreenTexts.OFF.getString();
-    private static final String YES = "§a" + ScreenTexts.YES.getString();
-    private static final String NO = "§c" + ScreenTexts.NO.getString();
+    private static final String ON = "§a" + CommonComponents.OPTION_ON.getString();
+    private static final String OFF = "§c" + CommonComponents.OPTION_OFF.getString();
+    private static final String YES = "§a" + CommonComponents.GUI_YES.getString();
+    private static final String NO = "§c" + CommonComponents.GUI_NO.getString();
 
     public OptionsScreen(Screen parent) {
         this(Pl3xMap.instance(), parent);
@@ -58,8 +57,8 @@ public class OptionsScreen extends AbstractScreen {
 
     @Override
     public void init() {
-        if (this.client != null && parent instanceof FullMapScreen) {
-            this.parent.init(this.client, this.width, this.height);
+        if (this.minecraft != null && parent instanceof FullMapScreen) {
+            this.parent.init(this.minecraft, this.width, this.height);
         }
 
         int center = (int) (this.width / 2F);
@@ -195,11 +194,11 @@ public class OptionsScreen extends AbstractScreen {
                 )
         );
 
-        this.options.forEach(this::addDrawableChild);
+        this.options.forEach(this::addRenderableWidget);
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float delta) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
         int centerX = (int) (this.width / 2F);
 
         if (parent instanceof FullMapScreen) {

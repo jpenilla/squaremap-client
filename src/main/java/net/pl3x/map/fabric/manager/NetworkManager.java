@@ -4,21 +4,20 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import io.netty.buffer.Unpooled;
+import java.util.UUID;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.pl3x.map.fabric.Pl3xMap;
 import net.pl3x.map.fabric.configuration.Lang;
 import net.pl3x.map.fabric.duck.MapTexture;
-import net.pl3x.map.fabric.mixin.MapRendererAccessor;
+import net.pl3x.map.fabric.mixin.MapRendererAccess;
 import net.pl3x.map.fabric.util.Constants;
 import net.pl3x.map.fabric.util.World;
 
-import java.util.UUID;
-
 public class NetworkManager {
-    private final Identifier channel = new Identifier(Constants.MODID, Constants.MODID);
+    private final ResourceLocation channel = new ResourceLocation(Constants.MODID, Constants.MODID);
     private final Pl3xMap pl3xmap;
 
     public NetworkManager(Pl3xMap pl3xmap) {
@@ -27,7 +26,7 @@ public class NetworkManager {
 
     public void initialize() {
         ClientPlayNetworking.registerGlobalReceiver(this.channel, (client, handler, buf, responseSender) -> {
-            ByteArrayDataInput packet = in(buf.getWrittenBytes());
+            ByteArrayDataInput packet = in(buf.accessByteBufWithCorrectSize());
             int packetType = packet.readInt();
             int protocol = packet.readInt();
             if (protocol != Constants.PROTOCOL) {
@@ -55,7 +54,7 @@ public class NetworkManager {
                     switch (response) {
                         case Constants.ERROR_NO_SUCH_MAP, Constants.ERROR_NO_SUCH_WORLD, Constants.ERROR_NOT_VANILLA_MAP -> {
                             int id = packet.readInt();
-                            MapTexture texture = (MapTexture) ((MapRendererAccessor)MinecraftClient.getInstance().gameRenderer.getMapRenderer()).accessMapTextures().get(id);
+                            MapTexture texture = (MapTexture) ((MapRendererAccess)Minecraft.getInstance().gameRenderer.getMapRenderer()).maps().get(id);
                             if (texture != null) {
                                 texture.skip();
                             }
@@ -67,7 +66,7 @@ public class NetworkManager {
                             int z = packet.readInt();
                             UUID uuid = UUID.fromString(packet.readUTF());
                             World world = this.pl3xmap.getServerManager().getWorld(uuid);
-                            MapTexture texture = (MapTexture) ((MapRendererAccessor)MinecraftClient.getInstance().gameRenderer.getMapRenderer()).accessMapTextures().get(id);
+                            MapTexture texture = (MapTexture) ((MapRendererAccess)Minecraft.getInstance().gameRenderer.getMapRenderer()).maps().get(id);
                             if (world != null && texture != null) {
                                 texture.setData(scale, x, z, world);
                             }
@@ -92,8 +91,8 @@ public class NetworkManager {
     }
 
     private void sendPacket(ByteArrayDataOutput packet) {
-        if (MinecraftClient.getInstance().getNetworkHandler() != null) {
-            ClientPlayNetworking.send(this.channel, new PacketByteBuf(Unpooled.wrappedBuffer(packet.toByteArray())));
+        if (Minecraft.getInstance().getConnection() != null) {
+            ClientPlayNetworking.send(this.channel, new FriendlyByteBuf(Unpooled.wrappedBuffer(packet.toByteArray())));
         } else {
             this.pl3xmap.getScheduler().addTask(20, () -> sendPacket(packet));
         }

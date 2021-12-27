@@ -6,6 +6,7 @@
   "pl3xmap.key.options.open": "Open map options menu",
   "pl3xmap.key.minimap.zoom.increase": "Minimap zoom out",
   "pl3xmap.key.minimap.zoom.decrease": "Minimap zoom in",
+  "pl3xmap.key.minimap.toggle": "Minimap toggle",
 
   "pl3xmap.screen.full-map.options": "Settings",
   "pl3xmap.screen.full-map.options.tooltip": "Configure the Pl3xMap options",

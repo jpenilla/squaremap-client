@@ -1,12 +1,11 @@
 package net.pl3x.map.fabric.tiles;
 
-import net.pl3x.map.fabric.Pl3xMap;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import net.pl3x.map.fabric.Pl3xMap;
 
 public class TileDownloader {
     public static final Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() / 2);
@@ -21,7 +20,7 @@ public class TileDownloader {
         if (this.queue.containsKey(tile)) {
             return; // already downloading
         }
-        this.queue.put(tile, CompletableFuture.runAsync(new TileQueue(this.pl3xmap, tile), this.executor)
+        this.queue.put(tile, CompletableFuture.runAsync(new TileQueue(this.pl3xmap, tile), executor)
                 .exceptionally(throwable -> {
                     throwable.printStackTrace();
                     this.queue.remove(tile);

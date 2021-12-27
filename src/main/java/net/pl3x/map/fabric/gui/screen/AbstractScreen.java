@@ -1,16 +1,15 @@
 package net.pl3x.map.fabric.gui.screen;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.HashMap;
+import java.util.Map;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.pl3x.map.fabric.Pl3xMap;
 import net.pl3x.map.fabric.keyboard.Key;
 import net.pl3x.map.fabric.scheduler.Task;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class AbstractScreen extends Screen {
     final Pl3xMap pl3xmap;
@@ -18,24 +17,24 @@ public abstract class AbstractScreen extends Screen {
     final KeyHandler keyHandler;
 
     protected AbstractScreen(Pl3xMap pl3xmap, Screen parent) {
-        super(new TranslatableText("pl3xmap.screen.options.title"));
+        super(new TranslatableComponent("pl3xmap.screen.options.title"));
         this.pl3xmap = pl3xmap;
         this.parent = parent;
         this.keyHandler = new KeyHandler();
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float delta) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
         renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, delta);
     }
 
     @Override
-    public void renderBackground(MatrixStack matrixStack, int vOffset) {
-        if (this.client != null && this.client.world != null) {
+    public void renderBackground(PoseStack matrixStack, int vOffset) {
+        if (this.minecraft != null && this.minecraft.level != null) {
             this.fillGradient(matrixStack, 0, 0, this.width, this.height, 0xD00F4863, 0xC0370038);
         } else {
-            this.renderBackgroundTexture(vOffset);
+            this.renderDirtBackground(vOffset);
         }
     }
 
@@ -45,8 +44,8 @@ public abstract class AbstractScreen extends Screen {
     }
 
     protected void openScreen(Screen screen) {
-        if (this.client != null) {
-            this.client.setScreen(screen);
+        if (this.minecraft != null) {
+            this.minecraft.setScreen(screen);
         }
     }
 
@@ -54,18 +53,18 @@ public abstract class AbstractScreen extends Screen {
     public void onClose() {
         this.pl3xmap.getConfigManager().save();
         this.keyHandler.cancel();
-        if (this.client != null) {
-            this.client.setScreen(this.parent);
+        if (this.minecraft != null) {
+            this.minecraft.setScreen(this.parent);
         }
     }
 
-    protected void drawText(MatrixStack matrixStack, String text, int x, int y) {
-        drawText(matrixStack, Text.of(text), x, y);
+    protected void drawText(PoseStack matrixStack, String text, int x, int y) {
+        drawText(matrixStack, Component.nullToEmpty(text), x, y);
     }
 
-    protected void drawText(MatrixStack matrixStack, Text text, int x, int y) {
-        x = x - (int) (this.textRenderer.getWidth(text) / 2F);
-        this.textRenderer.drawWithShadow(matrixStack, text, x, y, 0xFFFFFFFF);
+    protected void drawText(PoseStack matrixStack, Component text, int x, int y) {
+        x = x - (int) (this.font.width(text) / 2F);
+        this.font.drawShadow(matrixStack, text, x, y, 0xFFFFFFFF);
     }
 
     public class KeyHandler extends Task {
@@ -85,7 +84,7 @@ public abstract class AbstractScreen extends Screen {
         }
 
         public boolean isPressed(int code) {
-            return client != null && InputUtil.isKeyPressed(client.getWindow().getHandle(), code);
+            return minecraft != null && InputConstants.isKeyDown(minecraft.getWindow().getWindow(), code);
         }
 
         @Override

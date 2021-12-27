@@ -1,18 +1,17 @@
 package net.pl3x.map.fabric.tiles;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.texture.NativeImageBackedTexture;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
+import com.mojang.blaze3d.vertex.PoseStack;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.Locale;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.pl3x.map.fabric.Pl3xMap;
 import net.pl3x.map.fabric.util.Constants;
 import net.pl3x.map.fabric.util.Image;
 import net.pl3x.map.fabric.util.World;
-
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.Locale;
 
 public class Tile {
     public static final int SIZE = 512;
@@ -24,8 +23,8 @@ public class Tile {
     private final Image image;
     private final Object lock = new Object();
 
-    private final Identifier identifier;
-    private NativeImageBackedTexture texture;
+    private final ResourceLocation identifier;
+    private DynamicTexture texture;
 
     private long lastUsed;
 
@@ -37,7 +36,7 @@ public class Tile {
         this.image = new Image(SIZE);
         updateLastUsed();
 
-        this.identifier = new Identifier(Constants.MODID, world.getName().toLowerCase(Locale.ROOT) + "." + zoom + "." + x + "." + z);
+        this.identifier = new ResourceLocation(Constants.MODID, world.getName().toLowerCase(Locale.ROOT) + "." + zoom + "." + x + "." + z);
 
         initTexture();
     }
@@ -48,8 +47,8 @@ public class Tile {
             return;
         }
         synchronized (lock) {
-            this.texture = new NativeImageBackedTexture(SIZE, SIZE, true);
-            MinecraftClient.getInstance().getTextureManager().registerTexture(this.identifier, this.texture);
+            this.texture = new DynamicTexture(SIZE, SIZE, true);
+            Minecraft.getInstance().getTextureManager().register(this.identifier, this.texture);
         }
     }
 
@@ -99,24 +98,24 @@ public class Tile {
 
     public void updateTexture() {
         synchronized (lock) {
-            if (this.texture == null || this.texture.getImage() == null) {
+            if (this.texture == null || this.texture.getPixels() == null) {
                 Pl3xMap.instance().getScheduler().addTask(20, this::updateTexture);
                 return;
             }
             for (int x = 0; x < SIZE; x++) {
                 for (int z = 0; z < SIZE; z++) {
-                    this.texture.getImage().setColor(x, z, this.image.getPixel(x, z));
+                    this.texture.getPixels().setPixelRGBA(x, z, this.image.getPixel(x, z));
                 }
             }
             this.texture.upload();
         }
     }
 
-    public void render(MatrixStack matrixStack, float x, float y) {
+    public void render(PoseStack matrixStack, float x, float y) {
         render(matrixStack, x, y, x + SIZE, y + SIZE, 0F, 0F, 1F, 1F);
     }
 
-    public void render(MatrixStack matrixStack, float x0, float y0, float x1, float y1, float u0, float v0, float u1, float v1) {
+    public void render(PoseStack matrixStack, float x0, float y0, float x1, float y1, float u0, float v0, float u1, float v1) {
         updateLastUsed();
         Pl3xMap.instance().getTextureManager().drawTexture(matrixStack, this.identifier, x0, y0, x1, y1, u0, v0, u1, v1);
     }
@@ -143,6 +142,6 @@ public class Tile {
 
     @SuppressWarnings("ConstantConditions")
     private String ip() {
-        return MinecraftClient.getInstance().getCurrentServerEntry().address;
+        return Minecraft.getInstance().getCurrentServer().ip;
     }
 }

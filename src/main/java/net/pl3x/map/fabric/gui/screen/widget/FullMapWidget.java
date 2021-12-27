@@ -1,28 +1,27 @@
 package net.pl3x.map.fabric.gui.screen.widget;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
+import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.pl3x.map.fabric.Pl3xMap;
 import net.pl3x.map.fabric.tiles.Tile;
 import net.pl3x.map.fabric.util.World;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-public class FullMapWidget implements Drawable, Element, Selectable {
+public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry {
     private static final boolean DEBUG = false;
 
     private final Set<Tile> tiles = new LinkedHashSet<>();
 
     private final Pl3xMap pl3xmap;
-    private final MinecraftClient client;
+    private final Minecraft client;
     private final int width;
     private final int height;
     private final World world;
@@ -37,7 +36,7 @@ public class FullMapWidget implements Drawable, Element, Selectable {
 
     private long lastClick;
 
-    public FullMapWidget(Pl3xMap pl3xmap, MinecraftClient client, int width, int height) {
+    public FullMapWidget(Pl3xMap pl3xmap, Minecraft client, int width, int height) {
         this.pl3xmap = pl3xmap;
         this.client = client;
         this.width = width;
@@ -137,7 +136,7 @@ public class FullMapWidget implements Drawable, Element, Selectable {
     }
 
     public double getScale() {
-        return (1.0D / Math.pow(2, this.world.getZoomMax() - this.zoom)) / this.client.getWindow().getScaleFactor();
+        return (1.0D / Math.pow(2, this.world.getZoomMax() - this.zoom)) / this.client.getWindow().getGuiScale();
     }
 
     public int getPosX(double mouseX) {
@@ -148,8 +147,8 @@ public class FullMapWidget implements Drawable, Element, Selectable {
         return (int) screenToWorld(mouseY, this.offsetY);
     }
 
-    public Text getUrl() {
-        return new LiteralText(String.format("%s/?world=%s&zoom=%s&x=%s&z=%s",
+    public Component getUrl() {
+        return new TextComponent(String.format("%s/?world=%s&zoom=%s&x=%s&z=%s",
                 this.pl3xmap.getServerManager().getUrl(),
                 this.world.getName(),
                 this.zoom,
@@ -181,12 +180,12 @@ public class FullMapWidget implements Drawable, Element, Selectable {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float delta) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
         double extra = Math.pow(2, this.zoom > this.world.getZoomMax() ? this.zoom - this.world.getZoomMax() : 0);
         double pow = Math.pow(2, this.world.getZoomMax() - this.zoom) * extra;
-        double size = Tile.SIZE / this.client.getWindow().getScaleFactor() * extra;
+        double size = Tile.SIZE / this.client.getWindow().getGuiScale() * extra;
 
-        matrixStack.push();
+        matrixStack.pushPose();
         for (Tile tile : this.tiles) {
             float x0 = (float) Math.round(worldToScreen((tile.getX() << 9) * pow, this.offsetX));
             float y0 = (float) Math.round(worldToScreen((tile.getZ() << 9) * pow, this.offsetY));
@@ -195,11 +194,11 @@ public class FullMapWidget implements Drawable, Element, Selectable {
             tile.render(matrixStack, x0, y0, x1, y1, 0F, 0F, 1F, 1F);
 
             if (DEBUG) {
-                DrawableHelper.fill(matrixStack, (int) x0, (int) y0, (int) x0 + 1, (int) y1, 0x88888888);
-                DrawableHelper.fill(matrixStack, (int) x0, (int) y0, (int) x1, (int) y0 + 1, 0x88888888);
+                GuiComponent.fill(matrixStack, (int) x0, (int) y0, (int) x0 + 1, (int) y1, 0x88888888);
+                GuiComponent.fill(matrixStack, (int) x0, (int) y0, (int) x1, (int) y0 + 1, 0x88888888);
             }
         }
-        matrixStack.pop();
+        matrixStack.popPose();
 
         if (DEBUG) {
             int i = -1;
@@ -215,8 +214,8 @@ public class FullMapWidget implements Drawable, Element, Selectable {
         }
     }
 
-    private void debug(MatrixStack matrixStack, String str, int y) {
-        this.client.textRenderer.drawWithShadow(matrixStack, Text.of(str), 10, 50 + 10 * y, 0xFFFFFFFF);
+    private void debug(PoseStack matrixStack, String str, int y) {
+        this.client.font.drawShadow(matrixStack, Component.nullToEmpty(str), 10, 50 + 10 * y, 0xFFFFFFFF);
     }
 
     @Override
@@ -225,11 +224,11 @@ public class FullMapWidget implements Drawable, Element, Selectable {
     }
 
     @Override
-    public SelectionType getType() {
-        return SelectionType.NONE;
+    public NarrationPriority narrationPriority() {
+        return NarrationPriority.NONE;
     }
 
     @Override
-    public void appendNarrations(NarrationMessageBuilder builder) {
+    public void updateNarration(NarrationElementOutput builder) {
     }
 }

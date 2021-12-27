@@ -2,9 +2,6 @@ package net.pl3x.map.fabric.manager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.pl3x.map.fabric.Pl3xMap;
-import net.pl3x.map.fabric.configuration.Config;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -13,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.file.Files;
+import net.pl3x.map.fabric.Pl3xMap;
+import net.pl3x.map.fabric.configuration.Config;
 
 public class ConfigManager {
     private final Gson gson = new GsonBuilder()

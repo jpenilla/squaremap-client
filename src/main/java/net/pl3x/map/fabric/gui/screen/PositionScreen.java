@@ -1,20 +1,20 @@
 package net.pl3x.map.fabric.gui.screen;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.client.util.math.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
 import net.pl3x.map.fabric.Pl3xMap;
 import net.pl3x.map.fabric.gui.MiniMap;
 import net.pl3x.map.fabric.gui.screen.widget.MiniMapWidget;
 import org.lwjgl.glfw.GLFW;
 
 public class PositionScreen extends AbstractScreen {
-    private static final String SIZE = I18n.translate("pl3xmap.screen.position.size", "%s", "%s");
-    private static final String CENTER = I18n.translate("pl3xmap.screen.position.center", "%s", "%s");
-    private static final String HELP_1 = I18n.translate("pl3xmap.screen.position.help1");
-    private static final String HELP_2 = I18n.translate("pl3xmap.screen.position.help2");
-    private static final String HELP_3 = I18n.translate("pl3xmap.screen.position.help3");
-    private static final String HELP_4 = I18n.translate("pl3xmap.screen.position.help4");
+    private static final String SIZE = I18n.get("pl3xmap.screen.position.size", "%s", "%s");
+    private static final String CENTER = I18n.get("pl3xmap.screen.position.center", "%s", "%s");
+    private static final String HELP_1 = I18n.get("pl3xmap.screen.position.help1");
+    private static final String HELP_2 = I18n.get("pl3xmap.screen.position.help2");
+    private static final String HELP_3 = I18n.get("pl3xmap.screen.position.help3");
+    private static final String HELP_4 = I18n.get("pl3xmap.screen.position.help4");
 
     private final MiniMap minimap;
 
@@ -35,11 +35,11 @@ public class PositionScreen extends AbstractScreen {
     @Override
     protected void init() {
         // minimap is a clickable widget for click and drag conveniences
-        addDrawableChild(new MiniMapWidget(this.minimap));
+        addRenderableWidget(new MiniMapWidget(this.minimap));
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float delta) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
         super.render(matrixStack, mouseX, mouseY, delta);
 
         int centerX = (int) (this.width / 2F);

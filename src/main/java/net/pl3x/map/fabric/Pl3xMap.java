@@ -1,8 +1,7 @@
 package net.pl3x.map.fabric;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import net.pl3x.map.fabric.configuration.Config;
 import net.pl3x.map.fabric.duck.MapTexture;
 import net.pl3x.map.fabric.gui.MiniMap;
@@ -12,7 +11,7 @@ import net.pl3x.map.fabric.manager.NetworkManager;
 import net.pl3x.map.fabric.manager.ServerManager;
 import net.pl3x.map.fabric.manager.TextureManager;
 import net.pl3x.map.fabric.manager.TileManager;
-import net.pl3x.map.fabric.mixin.MapRendererAccessor;
+import net.pl3x.map.fabric.mixin.MapRendererAccess;
 import net.pl3x.map.fabric.scheduler.Scheduler;
 import net.pl3x.map.fabric.util.World;
 
@@ -106,7 +105,7 @@ public class Pl3xMap implements ClientModInitializer {
     }
 
     public void updateAllMapTextures() {
-        ((MapRendererAccessor)MinecraftClient.getInstance().gameRenderer.getMapRenderer()).accessMapTextures()
+        ((MapRendererAccess)Minecraft.getInstance().gameRenderer.getMapRenderer()).maps()
                 .values().forEach(texture -> ((MapTexture) texture).updateImage());
     }
 

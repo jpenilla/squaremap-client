@@ -5,10 +5,9 @@
   "compatibilityLevel": "JAVA_16",
   "refmap": "pl3xmap.refmap.json",
   "client": [
-    "MapColorAccessor",
-    "MapRendererAccessor",
+    "MapRendererAccess",
     "MapTextureMixin",
-    "ToastAccessor"
+    "ToastAccess"
   ],
   "injectors": {
     "defaultRequire": 1

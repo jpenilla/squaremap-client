@@ -1,24 +1,22 @@
 package net.pl3x.map.fabric.gui.screen.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.toast.Toast;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.pl3x.map.fabric.mixin.ToastAccessor;
-
+import com.mojang.blaze3d.vertex.PoseStack;
 import java.text.NumberFormat;
 import java.util.Locale;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.pl3x.map.fabric.mixin.ToastAccess;
 
-public class Coordinates extends DrawableHelper implements Drawable, Element, Selectable {
+public class Coordinates extends GuiComponent implements Widget, GuiEventListener, NarratableEntry {
     private static final NumberFormat NUMBER = NumberFormat.getInstance(Locale.US);
     private final FullMapWidget fullmap;
     private final int x;
@@ -34,38 +32,38 @@ public class Coordinates extends DrawableHelper implements Drawable, Element, Se
         this.height = height;
     }
 
-    public Text getCoordinates(int mouseX, int mouseY) {
+    public Component getCoordinates(int mouseX, int mouseY) {
         String x = NUMBER.format(this.fullmap.getPosX(mouseX));
         String y = NUMBER.format(this.fullmap.getPosY(mouseY));
-        return new TranslatableText("%s %s", x, y);
+        return new TranslatableComponent("%s %s", x, y);
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float delta) {
-        MinecraftClient minecraftClient = MinecraftClient.getInstance();
-        TextRenderer textRenderer = minecraftClient.textRenderer;
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
+        Minecraft minecraftClient = Minecraft.getInstance();
+        Font textRenderer = minecraftClient.font;
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, ToastAccessor.accessTEXTURE());
+        RenderSystem.setShaderTexture(0, ToastAccess.texture());
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        Text coordinates = getCoordinates(mouseX, mouseY);
-        int w2 = (int) ((textRenderer.getWidth(coordinates) + 20) / 2F);
+        Component coordinates = getCoordinates(mouseX, mouseY);
+        int w2 = (int) ((textRenderer.width(coordinates) + 20) / 2F);
         int h2 = (int) (this.height / 2F);
-        drawTexture(matrixStack, x, y, w2, h2, 0, 0, w2, h2, 256, 256);
-        drawTexture(matrixStack, x, y + h2, w2, h2, 0, 32 - h2, w2, h2, 256, 256);
-        drawTexture(matrixStack, x + w2, y, w2, h2, 160 - w2, 0, w2, h2, 256, 256);
-        drawTexture(matrixStack, x + w2, y + h2, w2, h2, 160 - w2, 32 - h2, w2, h2, 256, 256);
-        drawCenteredText(matrixStack, textRenderer, coordinates, this.x + w2, this.y + (this.height - 8) / 2, 0xffcccccc);
+        blit(matrixStack, x, y, w2, h2, 0, 0, w2, h2, 256, 256);
+        blit(matrixStack, x, y + h2, w2, h2, 0, 32 - h2, w2, h2, 256, 256);
+        blit(matrixStack, x + w2, y, w2, h2, 160 - w2, 0, w2, h2, 256, 256);
+        blit(matrixStack, x + w2, y + h2, w2, h2, 160 - w2, 32 - h2, w2, h2, 256, 256);
+        drawCenteredString(matrixStack, textRenderer, coordinates, this.x + w2, this.y + (this.height - 8) / 2, 0xffcccccc);
     }
 
     @Override
-    public SelectionType getType() {
-        return SelectionType.NONE;
+    public NarrationPriority narrationPriority() {
+        return NarrationPriority.NONE;
     }
 
     @Override
-    public void appendNarrations(NarrationMessageBuilder builder) {
+    public void updateNarration(NarrationElementOutput builder) {
     }
 }

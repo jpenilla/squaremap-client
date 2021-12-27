@@ -1,21 +1,20 @@
 package net.pl3x.map.fabric.gui.screen.widget;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.sound.SoundManager;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.OrderedText;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
+import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Mth;
 import net.pl3x.map.fabric.configuration.options.IntegerOption;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.List;
-
-public class Slider extends ClickableWidget implements Tickable {
+public class Slider extends AbstractWidget implements Tickable {
     private final Screen screen;
     private final IntegerOption option;
     private final double step;
@@ -38,31 +37,31 @@ public class Slider extends ClickableWidget implements Tickable {
     }
 
     @Override
-    public void appendNarrations(NarrationMessageBuilder builder) {
-        this.appendDefaultNarrations(builder);
+    public void updateNarration(NarrationElementOutput builder) {
+        this.defaultButtonNarrationText(builder);
     }
 
     @Override
-    public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float delta) {
+    public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
         super.renderButton(matrixStack, mouseX, mouseY, delta);
-        if (this.isHovered() && this.tooltipDelay > 10) {
-            this.renderTooltip(matrixStack, mouseX, mouseY);
+        if (this.isHoveredOrFocused() && this.tooltipDelay > 10) {
+            this.renderToolTip(matrixStack, mouseX, mouseY);
         }
     }
 
     @Override
-    protected void renderBackground(MatrixStack matrixStack, MinecraftClient client, int mouseX, int mouseY) {
-        RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
+    protected void renderBg(PoseStack matrixStack, Minecraft client, int mouseX, int mouseY) {
+        RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        int i = (this.isHovered() ? 2 : 1) * 20;
-        this.drawTexture(matrixStack, this.x + (int) (this.value * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
-        this.drawTexture(matrixStack, this.x + (int) (this.value * (double) (this.width - 8)) + 4, this.y, 196, 46 + i, 4, 20);
+        int i = (this.isHoveredOrFocused() ? 2 : 1) * 20;
+        this.blit(matrixStack, this.x + (int) (this.value * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
+        this.blit(matrixStack, this.x + (int) (this.value * (double) (this.width - 8)) + 4, this.y, 196, 46 + i, 4, 20);
     }
 
     @Override
-    public void renderTooltip(MatrixStack matrixStack, int mouseX, int mouseY) {
-        List<OrderedText> tooltip = MinecraftClient.getInstance().textRenderer.wrapLines(this.option.tooltip(), 200);
-        this.screen.renderOrderedTooltip(matrixStack, tooltip, mouseX, mouseY);
+    public void renderToolTip(PoseStack matrixStack, int mouseX, int mouseY) {
+        List<FormattedCharSequence> tooltip = Minecraft.getInstance().font.split(this.option.tooltip(), 200);
+        this.screen.renderTooltip(matrixStack, tooltip, mouseX, mouseY);
     }
 
     @Override
@@ -92,7 +91,7 @@ public class Slider extends ClickableWidget implements Tickable {
 
     private void setValue(double value) {
         double d = this.value;
-        this.value = MathHelper.clamp(value, 0.0D, 1.0D);
+        this.value = Mth.clamp(value, 0.0D, 1.0D);
         int intVal = getValue(this.value);
         if (d != this.value) {
             this.option.setValue(intVal);
@@ -108,31 +107,31 @@ public class Slider extends ClickableWidget implements Tickable {
 
     @Override
     public void onRelease(double mouseX, double mouseY) {
-        super.playDownSound(MinecraftClient.getInstance().getSoundManager());
+        super.playDownSound(Minecraft.getInstance().getSoundManager());
     }
 
     private double getRatio(double value) {
-        return MathHelper.clamp((this.adjust(value) - this.option.getMin()) / (this.option.getMax() - this.option.getMin()), 0.0D, 1.0D);
+        return Mth.clamp((this.adjust(value) - this.option.getMin()) / (this.option.getMax() - this.option.getMin()), 0.0D, 1.0D);
     }
 
     private int getValue(double ratio) {
-        return (int) Math.round(this.adjust(MathHelper.lerp(MathHelper.clamp(ratio, 0.0D, 1.0D), this.option.getMin(), this.option.getMax())));
+        return (int) Math.round(this.adjust(Mth.lerp(Mth.clamp(ratio, 0.0D, 1.0D), this.option.getMin(), this.option.getMax())));
     }
 
     private double adjust(double value) {
         if (this.step > 0.0F) {
             value = this.step * (float) Math.round(value / this.step);
         }
-        return MathHelper.clamp(value, this.option.getMin(), this.option.getMax());
+        return Mth.clamp(value, this.option.getMin(), this.option.getMax());
     }
 
     private void updateMessage() {
-        setMessage(Text.of(this.option.getName().getString() + ": " + this.option.getValue()));
+        setMessage(Component.nullToEmpty(this.option.getName().getString() + ": " + this.option.getValue()));
     }
 
     @Override
     public void tick() {
-        if (this.isHovered()) {
+        if (this.isHoveredOrFocused()) {
             this.tooltipDelay++;
         } else if (this.tooltipDelay > 0) {
             this.tooltipDelay = 0;

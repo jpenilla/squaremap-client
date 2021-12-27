@@ -1,11 +1,10 @@
 package net.pl3x.map.fabric.tiles;
 
-import net.pl3x.map.fabric.Pl3xMap;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import javax.imageio.ImageIO;
+import net.pl3x.map.fabric.Pl3xMap;
 
 public class TileQueue implements Runnable {
     private final Pl3xMap pl3xmap;

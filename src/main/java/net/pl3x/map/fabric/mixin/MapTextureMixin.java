@@ -1,8 +1,9 @@
 package net.pl3x.map.fabric.mixin;
 
-import net.minecraft.client.render.MapRenderer;
-import net.minecraft.client.texture.NativeImageBackedTexture;
-import net.minecraft.item.map.MapState;
+import net.minecraft.client.gui.MapRenderer;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.pl3x.map.fabric.Pl3xMap;
 import net.pl3x.map.fabric.duck.MapTexture;
 import net.pl3x.map.fabric.tiles.Tile;
@@ -15,15 +16,20 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(MapRenderer.MapTexture.class)
-public abstract class MapTextureMixin implements MapTexture {
+@Mixin(MapRenderer.MapInstance.class)
+abstract class MapTextureMixin implements MapTexture {
+
+    // todo: no idea why the refmap isn't being generated for these shadows
+
     @Final
-    @Shadow
-    private NativeImageBackedTexture texture;
-    @Shadow
-    private MapState state;
-    @Shadow
-    private boolean needsUpdate;
+    @Shadow(aliases = "field_2048")
+    private DynamicTexture texture;
+
+    @Shadow(aliases = "field_2046")
+    private MapItemSavedData data;
+
+    @Shadow(aliases = "field_34044")
+    private boolean requiresUpload;
 
     private final Pl3xMap pl3xmap = Pl3xMap.instance();
     private final Image image = new Image(128);
@@ -37,7 +43,7 @@ public abstract class MapTextureMixin implements MapTexture {
     private boolean skip;
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void injected(MapRenderer outer, int id, MapState state, CallbackInfo ci) {
+    private void injected(MapRenderer outer, int id, MapItemSavedData state, CallbackInfo ci) {
         this.id = id;
     }
 
@@ -87,7 +93,7 @@ public abstract class MapTextureMixin implements MapTexture {
                 this.image.setPixel(x, z, tile == null ? 0 : tile.getImage().getPixel(blockX & 511, blockZ & 511));
             }
         }
-        this.needsUpdate = true;
+        this.requiresUpload = true;
     }
 
     private void updateMapTexture() {
@@ -102,13 +108,13 @@ public abstract class MapTextureMixin implements MapTexture {
             int pl3xColor;
             for (int x = 0; x < 128; x++) {
                 for (int z = 0; z < 128; z++) {
-                    color = this.state.colors[x + z * 128] & 255;
+                    color = this.data.colors[x + z * 128] & 255;
                     if (color / 4 == 0) {
                         setPixelColor(x, z, 0);
                     } else {
                         pl3xColor = this.image.getPixel(x, z);
                         if (pl3xColor == 0) {
-                            setPixelColor(x, z, MapColorAccessor.getColors()[color / 4].getRenderColor(color & 3));
+                            setPixelColor(x, z, /*MapColorAccessor.getColors()[color / 4]*/MaterialColor.getColorFromPackedId(color & 3));
                         } else {
                             setPixelColor(x, z, pl3xColor);
                         }
@@ -121,6 +127,6 @@ public abstract class MapTextureMixin implements MapTexture {
 
     @SuppressWarnings("ConstantConditions")
     private void setPixelColor(int x, int z, int color) {
-        this.texture.getImage().setColor(x, z, color);
+        this.texture.getPixels().setPixelRGBA(x, z, color);
     }
 }
