@@ -11,7 +11,7 @@ import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
 
 public class TileDownloader {
     public static final Executor EXECUTOR = Executors.newFixedThreadPool(
-        Math.min(Runtime.getRuntime().availableProcessors() / 2, 4),
+        Math.max(1, Math.min(4, Runtime.getRuntime().availableProcessors() / 2)),
         new NamedThreadFactory("squaremap-client-tiledownloader")
     );
     private final Map<Tile, CompletableFuture<Void>> queue = new HashMap<>();
