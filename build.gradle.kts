@@ -2,14 +2,10 @@ plugins {
     id("quiet-fabric-loom") version "0.10-SNAPSHOT"
 }
 
-group = "net.pl3x.map.fabric"
-version = "1.3"
+group = "xyz.jpenilla.squaremap.client"
+version = "1.4.0-SNAPSHOT"
 
 val mcVersion = "1.18.1"
-
-base {
-    archivesName.set("Pl3xMap")
-}
 
 java {
     toolchain {
@@ -35,14 +31,16 @@ dependencies {
 
 tasks {
     processResources {
-        inputs.property("version", project.version)
-
+        val props = mapOf("version" to project.version)
+        inputs.properties(props)
         filesMatching("fabric.mod.json") {
-            expand(mapOf("version" to project.version))
+            expand(props)
         }
+
+        filteringCharset = Charsets.UTF_8.name()
     }
     withType<JavaCompile> {
-        options.encoding = "UTF-8"
+        options.encoding = Charsets.UTF_8.name()
         options.release.set(17)
     }
     jar {
@@ -53,8 +51,8 @@ tasks {
 }
 
 loom {
-    mixin.defaultRefmapName.set("pl3xmap.refmap.json")
-    accessWidenerPath.set(file("src/main/resources/pl3xmap.accesswidener"))
+    mixin.defaultRefmapName.set("squaremap-client.refmap.json")
+    accessWidenerPath.set(file("src/main/resources/squaremap-client.accesswidener"))
 }
 
 loom {

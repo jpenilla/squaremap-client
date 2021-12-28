@@ -7,4 +7,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "Pl3xMap-Fabric"
+rootProject.name = "squaremap-client"

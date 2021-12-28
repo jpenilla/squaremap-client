@@ -1,43 +1,47 @@
 {
   "schemaVersion": 1,
-  "id": "pl3xmap",
+  "id": "squaremap-client",
   "version": "${version}",
-  "name": "Pl3xMap",
-  "description": "Pl3xMap is a minimalistic and lightweight world map viewer for Paper servers using the vanilla Minecraft rendering style.\nThis mod replaces in-game maps using the Pl3xMap tiles to make them look better.\nOther features include\n  * MiniMap HUD\n  * Full screen map viewer",
+  "name": "squaremap client",
+  "description": "squaremap is a minimalistic and lightweight world map viewer for Paper servers using the vanilla Minecraft rendering style.\nThis mod replaces in-game maps using the squaremap tiles to make them look better.\nOther features include\n  * MiniMap HUD\n  * Full screen map viewer",
   "authors": [
+    "jmp",
     "BillyGalbreath",
     "Benonardo"
   ],
   "contact": {
-    "homepage": "https://map.pl3x.net/",
-    "issues": "https://github.com/Benonardo/Pl3xMap-Fabric/issues",
-    "sources": "https://github.com/Benonardo/Pl3xMap-Fabric"
+    "homepage": "https://github.com/jpenilla/squaremap-client",
+    "issues": "https://github.com/jpenilla/squaremap-client/issues",
+    "sources": "https://github.com/jpenilla/squaremap-client"
   },
   "license": "MIT",
   "icon": "assets/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "net.pl3x.map.fabric.Pl3xMap"
+      "xyz.jpenilla.squaremap.client.SquaremapClientInitializer"
     ],
     "modmenu": [
-      "net.pl3x.map.fabric.gui.ModMenu"
+      "xyz.jpenilla.squaremap.client.gui.ModMenu"
     ]
   },
   "mixins": [
-    "pl3xmap.mixins.json"
+    "squaremap-client.mixins.json"
   ],
-  "accessWidener": "pl3xmap.accesswidener",
+  "accessWidener": "squaremap-client.accesswidener",
   "depends": {
-    "fabricloader": ">=0.11.6",
+    "fabricloader": ">=0.12.12",
     "fabric": "*",
     "minecraft": "1.18.x"
+  },
+  "conflicts": {
+    "pl3xmap": "*"
   },
   "custom": {
     "modmenu": {
       "links": {
         "modmenu.discord": "https://discord.gg/B8WpDPXeBh",
-        "pl3xmap.plugin.link": "https://github.com/Benonardo/Pl3xMap"
+        "squaremap-client.plugin.link": "https://github.com/jpenilla/squaremap"
       }
     }
   }

@@ -1,0 +1,49 @@
+{
+  "squaremap-client.plugin.link": "Server Plugin",
+
+  "squaremap-client.key.category": "squaremap",
+  "squaremap-client.key.full-map.open": "Open full screen map",
+  "squaremap-client.key.options.open": "Open map options menu",
+  "squaremap-client.key.minimap.zoom.increase": "Minimap zoom out",
+  "squaremap-client.key.minimap.zoom.decrease": "Minimap zoom in",
+  "squaremap-client.key.minimap.toggle": "Minimap toggle",
+
+  "squaremap-client.screen.full-map.options": "Settings",
+  "squaremap-client.screen.full-map.options.tooltip": "Configure the squaremap options",
+
+  "squaremap-client.screen.position.size": "Size: %s Zoom: %s",
+  "squaremap-client.screen.position.center": "Position: %s, %s",
+  "squaremap-client.screen.position.help1": "Drag the minimap to position",
+  "squaremap-client.screen.position.help2": "Mouse wheel to zoom",
+  "squaremap-client.screen.position.help3": "CTRL + mouse wheel to resize",
+  "squaremap-client.screen.position.help4": "Press ESC when done",
+
+  "squaremap-client.screen.options.title": "squaremap",
+
+  "squaremap-client.screen.options.renderer.title": "Map Item Renderer",
+  "squaremap-client.screen.options.renderer.enabled": "Map Renderer",
+  "squaremap-client.screen.options.renderer.enabled.tooltip": "Toggle the in-game map renderer",
+  "squaremap-client.screen.options.renderer.fog-of-war": "Fog of War",
+  "squaremap-client.screen.options.renderer.fog-of-war.tooltip": "Toggle fog of war for the in-game map renderer",
+
+  "squaremap-client.screen.options.minimap.title": "Minimap Options",
+  "squaremap-client.screen.options.minimap.enabled": "Minimap Enabled",
+  "squaremap-client.screen.options.minimap.enabled.tooltip": "Toggle the minimap on/off",
+  "squaremap-client.screen.options.minimap.north-locked": "North Locked",
+  "squaremap-client.screen.options.minimap.north-locked.tooltip": "Sets if the minimap should lock with the north position facing up",
+  "squaremap-client.screen.options.minimap.frame": "Frame",
+  "squaremap-client.screen.options.minimap.frame.tooltip": "Shows frame around the minimap",
+  "squaremap-client.screen.options.minimap.circular": "Circular",
+  "squaremap-client.screen.options.minimap.circular.tooltip": "Choose between circular and square minimap shapes",
+  "squaremap-client.screen.options.minimap.directions": "Cardinal Directions",
+  "squaremap-client.screen.options.minimap.directions.tooltip": "Shows the cardinal directions around the minimap",
+  "squaremap-client.screen.options.minimap.coordinates": "Coordinates",
+  "squaremap-client.screen.options.minimap.coordinates.tooltip": "Shows your coordinates under the minimap",
+  "squaremap-client.screen.options.minimap.update-interval": "Update Interval",
+  "squaremap-client.screen.options.minimap.update-interval.tooltip": "How many ticks between updates\nNote: Lower values may cause lag",
+  "squaremap-client.screen.options.minimap.position-size-zoom": "Position, Size, Zoom",
+  "squaremap-client.screen.options.minimap.position-size-zoom.tooltip": "Set the position, size, and zoom of the minimap",
+  "squaremap-client.screen.options.minimap.position-size-zoom.error": "Cannot load minimap...",
+
+  "squaremap-client.error.server.incompatible": "This server is running an incompatible squaremap version"
+}

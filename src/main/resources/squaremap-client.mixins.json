@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8.4",
+  "package": "xyz.jpenilla.squaremap.client.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "squaremap-client.refmap.json",
+  "client": [
+    "MapRendererAccess",
+    "MapInstanceMixin",
+    "ToastAccess"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
