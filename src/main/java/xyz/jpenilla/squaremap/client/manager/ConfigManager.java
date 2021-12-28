@@ -13,11 +13,11 @@ import xyz.jpenilla.squaremap.client.config.Config;
 
 public class ConfigManager {
     private final Gson gson = new GsonBuilder()
-            .disableHtmlEscaping()
-            .serializeNulls()
-            .setLenient()
-            .setPrettyPrinting()
-            .create();
+        .disableHtmlEscaping()
+        .serializeNulls()
+        .setLenient()
+        .setPrettyPrinting()
+        .create();
 
     private Path configFile;
     private Config config;

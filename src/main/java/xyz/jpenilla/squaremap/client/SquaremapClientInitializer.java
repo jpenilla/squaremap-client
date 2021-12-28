@@ -105,8 +105,8 @@ public class SquaremapClientInitializer implements ClientModInitializer {
     }
 
     public void updateAllMapTextures() {
-        ((MapRendererAccess)Minecraft.getInstance().gameRenderer.getMapRenderer()).maps()
-                .values().forEach(texture -> ((MapTexture) texture).updateImage());
+        ((MapRendererAccess) Minecraft.getInstance().gameRenderer.getMapRenderer()).maps()
+            .values().forEach(texture -> ((MapTexture) texture).updateImage());
     }
 
     public void clearAllData() {

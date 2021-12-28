@@ -21,12 +21,12 @@ public class Keyboard {
 
     public void initialize() {
         this.globalKeys.addAll(List.of(
-                new Key("squaremap-client.key.options.open", "squaremap-client.key.category", GLFW.GLFW_KEY_M, () -> Minecraft.getInstance().setScreen(new FullMapScreen(this.squaremap, null))),
+            new Key("squaremap-client.key.options.open", "squaremap-client.key.category", GLFW.GLFW_KEY_M, () -> Minecraft.getInstance().setScreen(new FullMapScreen(this.squaremap, null))),
 
-                new Key("squaremap-client.key.minimap.zoom.increase", "squaremap-client.key.category", GLFW.GLFW_KEY_PAGE_UP, () -> this.squaremap.getMiniMap().addZoomLevel(1)),
-                new Key("squaremap-client.key.minimap.zoom.decrease", "squaremap-client.key.category", GLFW.GLFW_KEY_PAGE_DOWN, () -> this.squaremap.getMiniMap().addZoomLevel(-1)),
+            new Key("squaremap-client.key.minimap.zoom.increase", "squaremap-client.key.category", GLFW.GLFW_KEY_PAGE_UP, () -> this.squaremap.getMiniMap().addZoomLevel(1)),
+            new Key("squaremap-client.key.minimap.zoom.decrease", "squaremap-client.key.category", GLFW.GLFW_KEY_PAGE_DOWN, () -> this.squaremap.getMiniMap().addZoomLevel(-1)),
 
-                new Key("squaremap-client.key.minimap.toggle", "squaremap-client.key.category", GLFW.GLFW_KEY_RIGHT_BRACKET, () -> this.squaremap.getMiniMap().toggle())
+            new Key("squaremap-client.key.minimap.toggle", "squaremap-client.key.category", GLFW.GLFW_KEY_RIGHT_BRACKET, () -> this.squaremap.getMiniMap().toggle())
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> this.globalKeys.forEach(Key::check));

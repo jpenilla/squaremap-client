@@ -22,11 +22,11 @@ public final class TileQueue implements Runnable {
                 return;
             }
             BufferedImage buffered = ImageIO.read(new URL(String.format("%s/tiles/%s/%s/%s_%s.png",
-                    this.squaremap.getServerManager().getUrl(),
-                    this.tile.getWorld().name(),
-                    this.tile.getZoom(),
-                    this.tile.getX(),
-                    this.tile.getZ()
+                this.squaremap.getServerManager().getUrl(),
+                this.tile.getWorld().name(),
+                this.tile.getZoom(),
+                this.tile.getX(),
+                this.tile.getZ()
             )));
             if (buffered != null) {
                 ImageIO.write(buffered, "png", this.tile.getFile());

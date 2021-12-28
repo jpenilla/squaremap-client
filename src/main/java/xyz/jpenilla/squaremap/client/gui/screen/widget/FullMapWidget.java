@@ -149,11 +149,11 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
 
     public Component getUrl() {
         return new TextComponent(String.format("%s/?world=%s&zoom=%s&x=%s&z=%s",
-                this.squaremap.getServerManager().getUrl(),
-                this.world.name(),
-                this.zoom,
-                Math.round(getPosX(this.width / 2F)),
-                Math.round(getPosY(this.height / 2F))
+            this.squaremap.getServerManager().getUrl(),
+            this.world.name(),
+            this.zoom,
+            Math.round(getPosX(this.width / 2F)),
+            Math.round(getPosY(this.height / 2F))
         ));
     }
 
