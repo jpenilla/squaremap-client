@@ -187,8 +187,8 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
 
         matrixStack.pushPose();
         for (Tile tile : this.tiles) {
-            float x0 = (float) Math.round(worldToScreen((tile.getX() << 9) * pow, this.offsetX));
-            float y0 = (float) Math.round(worldToScreen((tile.getZ() << 9) * pow, this.offsetY));
+            float x0 = (float) worldToScreen(tile.getX() * 512 * pow, this.offsetX);
+            float y0 = (float) worldToScreen(tile.getZ() * 512 * pow, this.offsetY);
             float x1 = (float) (x0 + size);
             float y1 = (float) (y0 + size);
             tile.render(matrixStack, x0, y0, x1, y1, 0F, 0F, 1F, 1F);
