@@ -5,7 +5,6 @@ import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -18,8 +17,8 @@ import xyz.jpenilla.squaremap.client.gui.screen.widget.Tickable;
 
 public class OptionsScreen extends AbstractScreen {
     private List<AbstractWidget> options;
-    private static final String RENDERER = I18n.get("squaremap-client.screen.options.renderer.title");
-    private static final String MINIMAP = I18n.get("squaremap-client.screen.options.minimap.title");
+    private static final Component RENDERER = new TranslatableComponent("squaremap-client.screen.options.renderer.title");
+    private static final Component MINIMAP = new TranslatableComponent("squaremap-client.screen.options.minimap.title");
 
     private static final Component RENDERER_ENABLED = new TranslatableComponent("squaremap-client.screen.options.renderer.enabled");
     private static final Component RENDERER_ENABLED_TOOLTIP = new TranslatableComponent("squaremap-client.screen.options.renderer.enabled.tooltip");
