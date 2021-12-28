@@ -3,10 +3,10 @@ package xyz.jpenilla.squaremap.client.gui.screen;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
+import org.lwjgl.glfw.GLFW;
 import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
 import xyz.jpenilla.squaremap.client.gui.MiniMap;
 import xyz.jpenilla.squaremap.client.gui.screen.widget.MiniMapWidget;
-import org.lwjgl.glfw.GLFW;
 
 public class PositionScreen extends AbstractScreen {
     private static final String SIZE = I18n.get("squaremap-client.screen.position.size", "%s", "%s");

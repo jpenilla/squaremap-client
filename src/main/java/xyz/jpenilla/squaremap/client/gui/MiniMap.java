@@ -9,13 +9,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import org.lwjgl.opengl.GL11;
 import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
 import xyz.jpenilla.squaremap.client.configuration.MiniMapConfig;
 import xyz.jpenilla.squaremap.client.manager.TextureManager;
 import xyz.jpenilla.squaremap.client.scheduler.Task;
 import xyz.jpenilla.squaremap.client.tiles.Tile;
 import xyz.jpenilla.squaremap.client.util.Image;
-import org.lwjgl.opengl.GL11;
 
 public class MiniMap {
     private final static int MAP_SIZE = 512;

@@ -4,17 +4,17 @@ import net.minecraft.client.gui.MapRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
-import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
-import xyz.jpenilla.squaremap.client.duck.MapTexture;
-import xyz.jpenilla.squaremap.client.tiles.Tile;
-import xyz.jpenilla.squaremap.client.util.Image;
-import xyz.jpenilla.squaremap.client.util.WorldInfo;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
+import xyz.jpenilla.squaremap.client.duck.MapTexture;
+import xyz.jpenilla.squaremap.client.tiles.Tile;
+import xyz.jpenilla.squaremap.client.util.Image;
+import xyz.jpenilla.squaremap.client.util.WorldInfo;
 
 @Mixin(MapRenderer.MapInstance.class)
 abstract class MapInstanceMixin implements MapTexture {
