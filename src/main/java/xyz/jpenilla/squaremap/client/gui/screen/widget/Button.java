@@ -10,7 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.FormattedCharSequence;
-import xyz.jpenilla.squaremap.client.configuration.options.BooleanOption;
+import xyz.jpenilla.squaremap.client.config.options.BooleanOption;
 
 public class Button extends AbstractButton implements Tickable {
     private final Screen screen;

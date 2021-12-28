@@ -1,4 +1,4 @@
-package xyz.jpenilla.squaremap.client.configuration;
+package xyz.jpenilla.squaremap.client.config;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

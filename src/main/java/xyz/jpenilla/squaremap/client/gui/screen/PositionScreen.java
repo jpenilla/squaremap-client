@@ -2,19 +2,18 @@ package xyz.jpenilla.squaremap.client.gui.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.lwjgl.glfw.GLFW;
 import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
 import xyz.jpenilla.squaremap.client.gui.MiniMap;
 import xyz.jpenilla.squaremap.client.gui.screen.widget.MiniMapWidget;
 
 public class PositionScreen extends AbstractScreen {
-    private static final String SIZE = I18n.get("squaremap-client.screen.position.size", "%s", "%s");
-    private static final String CENTER = I18n.get("squaremap-client.screen.position.center", "%s", "%s");
-    private static final String HELP_1 = I18n.get("squaremap-client.screen.position.help1");
-    private static final String HELP_2 = I18n.get("squaremap-client.screen.position.help2");
-    private static final String HELP_3 = I18n.get("squaremap-client.screen.position.help3");
-    private static final String HELP_4 = I18n.get("squaremap-client.screen.position.help4");
+    private static final Component HELP_1 = new TranslatableComponent("squaremap-client.screen.position.help1");
+    private static final Component HELP_2 = new TranslatableComponent("squaremap-client.screen.position.help2");
+    private static final Component HELP_3 = new TranslatableComponent("squaremap-client.screen.position.help3");
+    private static final Component HELP_4 = new TranslatableComponent("squaremap-client.screen.position.help4");
 
     private final MiniMap minimap;
 
@@ -47,8 +46,8 @@ public class PositionScreen extends AbstractScreen {
 
         drawText(matrixStack, this.title, centerX, 15);
 
-        drawText(matrixStack, String.format(SIZE, this.minimap.getSize(), this.minimap.getZoom()), centerX, 30);
-        drawText(matrixStack, String.format(CENTER, this.minimap.getCenterX(), this.minimap.getCenterZ()), centerX, 40);
+        drawText(matrixStack, new TranslatableComponent("squaremap-client.screen.position.size", this.minimap.getSize(), this.minimap.getZoom()), centerX, 30);
+        drawText(matrixStack, new TranslatableComponent("squaremap-client.screen.position.center", this.minimap.getCenterX(), this.minimap.getCenterZ()), centerX, 40);
 
         drawText(matrixStack, HELP_1, centerX, centerY - 30);
         drawText(matrixStack, HELP_2, centerX, centerY - 10);

@@ -6,7 +6,7 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
 
-public class TileQueue implements Runnable {
+public final class TileQueue implements Runnable {
     private final SquaremapClientInitializer squaremap;
     private final Tile tile;
 

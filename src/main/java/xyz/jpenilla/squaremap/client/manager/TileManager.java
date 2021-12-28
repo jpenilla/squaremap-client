@@ -14,6 +14,7 @@ import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
 import xyz.jpenilla.squaremap.client.tiles.Tile;
 import xyz.jpenilla.squaremap.client.tiles.TileDownloader;
 import xyz.jpenilla.squaremap.client.util.Constants;
+import xyz.jpenilla.squaremap.client.util.Util;
 import xyz.jpenilla.squaremap.client.util.WorldInfo;
 
 public class TileManager {
@@ -71,25 +72,25 @@ public class TileManager {
             this.tileDownloader.queue(tile);
             return tile;
         }
-        CompletableFuture.runAsync(() -> {
-                    try {
-                        BufferedImage buffer = ImageIO.read(file);
-                        if (buffer != null) {
-                            tile.setImage(buffer);
-                        }
-                    } catch (IOException ignore) {
+        CompletableFuture.runAsync(
+            () -> {
+                try {
+                    BufferedImage buffer = ImageIO.read(file);
+                    if (buffer != null) {
+                        tile.setImage(buffer);
                     }
-                }, TileDownloader.executor)
-                .exceptionally(throwable -> {
-                    throwable.printStackTrace();
-                    return null;
-                })
-                .whenComplete((result, throwable) -> {
-                    if (throwable != null) {
-                        throwable.printStackTrace();
-                    }
-                    tile.updateTexture();
-                });
+                } catch (IOException ex) {
+                    throw Util.rethrow(ex);
+                }
+            },
+            TileDownloader.EXECUTOR
+        ).whenComplete(($, throwable) -> {
+            if (throwable != null) {
+                throwable.printStackTrace();
+            }
+
+            tile.updateTexture();
+        });
         return tile;
     }
 

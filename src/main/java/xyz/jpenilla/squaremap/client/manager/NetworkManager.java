@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
-import xyz.jpenilla.squaremap.client.configuration.Lang;
+import xyz.jpenilla.squaremap.client.config.Lang;
 import xyz.jpenilla.squaremap.client.duck.MapTexture;
 import xyz.jpenilla.squaremap.client.mixin.MapRendererAccess;
 import xyz.jpenilla.squaremap.client.util.Constants;

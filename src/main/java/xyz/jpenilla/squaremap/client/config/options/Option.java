@@ -1,4 +1,4 @@
-package xyz.jpenilla.squaremap.client.configuration.options;
+package xyz.jpenilla.squaremap.client.config.options;
 
 import net.minecraft.network.chat.Component;
 import xyz.jpenilla.squaremap.client.gui.screen.widget.Button;

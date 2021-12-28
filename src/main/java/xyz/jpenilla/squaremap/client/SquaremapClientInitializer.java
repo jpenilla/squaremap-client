@@ -2,7 +2,7 @@ package xyz.jpenilla.squaremap.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.Minecraft;
-import xyz.jpenilla.squaremap.client.configuration.Config;
+import xyz.jpenilla.squaremap.client.config.Config;
 import xyz.jpenilla.squaremap.client.duck.MapTexture;
 import xyz.jpenilla.squaremap.client.gui.MiniMap;
 import xyz.jpenilla.squaremap.client.keyboard.Keyboard;

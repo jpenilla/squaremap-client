@@ -12,7 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import org.lwjgl.glfw.GLFW;
-import xyz.jpenilla.squaremap.client.configuration.options.IntegerOption;
+import xyz.jpenilla.squaremap.client.config.options.IntegerOption;
 
 public class Slider extends AbstractWidget implements Tickable {
     private final Screen screen;

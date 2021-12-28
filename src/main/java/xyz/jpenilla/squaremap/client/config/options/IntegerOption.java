@@ -1,17 +1,21 @@
-package xyz.jpenilla.squaremap.client.configuration.options;
+package xyz.jpenilla.squaremap.client.config.options;
 
 import net.minecraft.network.chat.Component;
 import xyz.jpenilla.squaremap.client.gui.screen.widget.Button;
 
-public class BooleanOption implements Option<Boolean> {
+public class IntegerOption implements Option<Integer> {
     private final Component name;
     private final Component tooltip;
     private final Getter getter;
     private final Setter setter;
+    private final int min;
+    private final int max;
 
-    public BooleanOption(Component name, Component tooltip, Getter getter, Setter setter) {
+    public IntegerOption(Component name, Component tooltip, int min, int max, Getter getter, Setter setter) {
         this.name = name;
         this.tooltip = tooltip;
+        this.min = min;
+        this.max = max;
         this.getter = getter;
         this.setter = setter;
     }
@@ -27,30 +31,35 @@ public class BooleanOption implements Option<Boolean> {
     }
 
     @Override
-    public Boolean getValue() {
+    public Integer getValue() {
         return this.getter.get();
     }
 
     @Override
-    public void setValue(Boolean value) {
+    public void setValue(Integer value) {
         this.setter.set(value);
     }
 
     @Override
     public Button.PressAction onPress() {
-        return (button) -> {
-            setValue(!getValue());
-            button.updateMessage();
-        };
+        return null;
+    }
+
+    public int getMax() {
+        return this.max;
+    }
+
+    public int getMin() {
+        return this.min;
     }
 
     @FunctionalInterface
     public interface Getter {
-        boolean get();
+        int get();
     }
 
     @FunctionalInterface
     public interface Setter {
-        void set(boolean value);
+        void set(int value);
     }
 }

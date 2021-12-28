@@ -1,6 +1,9 @@
 package xyz.jpenilla.squaremap.client.util;
 
-public class Constants {
+public final class Constants {
+    private Constants() {
+    }
+
     public static final String MODID = "squaremap-client";
 
     public static final int SERVER_DATA = 0;

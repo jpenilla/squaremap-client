@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import net.fabricmc.loader.api.FabricLoader;
 import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
-import xyz.jpenilla.squaremap.client.configuration.Config;
+import xyz.jpenilla.squaremap.client.config.Config;
 
 public class ConfigManager {
     private final Gson gson = new GsonBuilder()

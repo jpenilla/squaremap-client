@@ -62,19 +62,19 @@ public class FullMapScreen extends AbstractScreen {
         addRenderableWidget(this.fullmap = new FullMapWidget(this.squaremap, this.minecraft, this.width, this.height));
 
         List.of(
-                new Button(this, 5, 5, 20, 20, ZOOM_IN, BLANK, (button) -> this.fullmap.zoom(1)),
-                new Button(this, 5, 25, 20, 20, ZOOM_OUT, BLANK, (button) -> this.fullmap.zoom(-1)),
-                new Button(this, 5, this.height - 25, 20, 20, LINK, BLANK, (button) -> this.openURL = this.fullmap.getUrl()),
-                new Coordinates(this.fullmap, 30, this.height - 25, 50, 20),
-                // TODO sidebar for world and player select
-                new Button(this, this.width - 87, this.height - 25, 80, 20, OPTIONS, OPTIONS_TOOLTIP, (button) -> openScreen(new OptionsScreen(this.squaremap, this)))
+            new Button(this, 5, 5, 20, 20, ZOOM_IN, BLANK, (button) -> this.fullmap.zoom(1)),
+            new Button(this, 5, 25, 20, 20, ZOOM_OUT, BLANK, (button) -> this.fullmap.zoom(-1)),
+            new Button(this, 5, this.height - 25, 20, 20, LINK, BLANK, (button) -> this.openURL = this.fullmap.getUrl()),
+            new Coordinates(this.fullmap, 30, this.height - 25, 50, 20),
+            // TODO sidebar for world and player select
+            new Button(this, this.width - 87, this.height - 25, 80, 20, OPTIONS, OPTIONS_TOOLTIP, (button) -> openScreen(new OptionsScreen(this.squaremap, this)))
         ).forEach(this::addRenderableWidget);
 
         this.confirmLink.clear();
         this.confirmLink.addAll(List.of(
-                new net.minecraft.client.gui.components.Button(this.width / 2 - 50 - 105, this.height / 6 + 96, 100, 20, OPEN, (button) -> openLink()),
-                new net.minecraft.client.gui.components.Button(this.width / 2 - 50, this.height / 6 + 96, 100, 20, COPY, (button) -> copyLink()),
-                new net.minecraft.client.gui.components.Button(this.width / 2 - 50 + 105, this.height / 6 + 96, 100, 20, CANCEL, (button) -> cancel())
+            new net.minecraft.client.gui.components.Button(this.width / 2 - 50 - 105, this.height / 6 + 96, 100, 20, OPEN, (button) -> openLink()),
+            new net.minecraft.client.gui.components.Button(this.width / 2 - 50, this.height / 6 + 96, 100, 20, COPY, (button) -> copyLink()),
+            new net.minecraft.client.gui.components.Button(this.width / 2 - 50 + 105, this.height / 6 + 96, 100, 20, CANCEL, (button) -> cancel())
         ));
 
         // reverse the elements to draw bottom up and click top down

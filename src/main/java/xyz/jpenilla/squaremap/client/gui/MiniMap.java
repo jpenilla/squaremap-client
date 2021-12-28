@@ -11,7 +11,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import org.lwjgl.opengl.GL11;
 import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
-import xyz.jpenilla.squaremap.client.configuration.MiniMapConfig;
+import xyz.jpenilla.squaremap.client.config.MiniMapConfig;
 import xyz.jpenilla.squaremap.client.manager.TextureManager;
 import xyz.jpenilla.squaremap.client.scheduler.Task;
 import xyz.jpenilla.squaremap.client.tiles.Tile;
@@ -344,13 +344,7 @@ public class MiniMap {
                 this.mapTexture.upload();
                 this.updating = false;
             }
-        }).exceptionally(throwable -> {
-            this.updating = false;
-            if (throwable != null) {
-                throwable.printStackTrace();
-            }
-            return null;
-        }).whenComplete((consumer, throwable) -> {
+        }).whenComplete(($, throwable) -> {
             this.updating = false;
             if (throwable != null) {
                 throwable.printStackTrace();
