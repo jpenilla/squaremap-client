@@ -75,6 +75,7 @@ public class ConfigManager {
             final Path oldConfig = FabricLoader.getInstance().getConfigDir().resolve("pl3xmap.json");
             if (Files.isRegularFile(oldConfig)) {
                 Files.copy(oldConfig, this.configFile);
+                Files.move(oldConfig, oldConfig.resolveSibling(oldConfig.getFileName().toString() + ".bak"));
             }
         }
 
