@@ -2,7 +2,6 @@ package xyz.jpenilla.squaremap.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import java.util.concurrent.CompletableFuture;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.Minecraft;
@@ -16,6 +15,7 @@ import xyz.jpenilla.squaremap.client.manager.TextureManager;
 import xyz.jpenilla.squaremap.client.scheduler.Task;
 import xyz.jpenilla.squaremap.client.tiles.Tile;
 import xyz.jpenilla.squaremap.client.util.Image;
+import xyz.jpenilla.squaremap.client.util.Util;
 
 public class MiniMap {
     private final static int MAP_SIZE = 512;
@@ -414,7 +414,7 @@ public class MiniMap {
                     matrixStack.scale(1.41421356237F, 1.41421356237F, 1.41421356237F);
                     matrixStack.translate(-this.centerX, -this.centerZ, 0);
                 }
-                rotateScene(matrixStack, this.centerX, this.centerZ, -angle);
+                Util.rotateScene(matrixStack, this.centerX, this.centerZ, -angle);
             }
             tex.drawTexture(matrixStack, TextureManager.MAP, x0 - halfScale, y0 + halfScale, x1 - halfScale, y1 + halfScale, u, v);
             matrixStack.popPose();
@@ -428,7 +428,7 @@ public class MiniMap {
             matrixStack.pushPose();
             if (this.northLocked) {
                 // only allow rotating if map is not rotating or if northlocked
-                rotateScene(matrixStack, this.centerX, this.centerZ, angle);
+                Util.rotateScene(matrixStack, this.centerX, this.centerZ, angle);
             }
             tex.drawTexture(matrixStack, TextureManager.SELF, x0 + markerOffset, y0, x1 + markerOffset, y1, u2, v2);
             matrixStack.popPose();
@@ -492,12 +492,6 @@ public class MiniMap {
         x -= (int) (this.client.font.width(text) / 2F);
         this.client.font.draw(matrixStack, text, x + 1, y + 1, 0xFF3F3F3F);
         this.client.font.draw(matrixStack, text, x, y, 0xFFFFFFFF);
-    }
-
-    private void rotateScene(PoseStack matrixStack, int x, int y, float degrees) {
-        matrixStack.translate(x, y, 0);
-        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(degrees));
-        matrixStack.translate(-x, -y, 0);
     }
 
     private float cos(float degree) {

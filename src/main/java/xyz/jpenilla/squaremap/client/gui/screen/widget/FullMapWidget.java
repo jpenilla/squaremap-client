@@ -12,7 +12,9 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
+import xyz.jpenilla.squaremap.client.manager.TextureManager;
 import xyz.jpenilla.squaremap.client.tiles.Tile;
+import xyz.jpenilla.squaremap.client.util.Util;
 import xyz.jpenilla.squaremap.client.util.WorldInfo;
 
 public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry {
@@ -187,8 +189,8 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
 
         matrixStack.pushPose();
         for (Tile tile : this.tiles) {
-            float x0 = (float) worldToScreen(tile.getX() * 512 * pow, this.offsetX);
-            float y0 = (float) worldToScreen(tile.getZ() * 512 * pow, this.offsetY);
+            float x0 = (float) this.worldToScreen(tile.getX() * 512 * pow, this.offsetX);
+            float y0 = (float) this.worldToScreen(tile.getZ() * 512 * pow, this.offsetY);
             float x1 = (float) (x0 + size);
             float y1 = (float) (y0 + size);
             tile.render(matrixStack, x0, y0, x1, y1, 0F, 0F, 1F, 1F);
@@ -200,8 +202,11 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
         }
         matrixStack.popPose();
 
+        this.drawPlayerIcon(matrixStack, delta, size, this.client.player.getBlockX(), this.client.player.getBlockZ());
+
         if (DEBUG) {
             int i = -1;
+            debug(matrixStack, "player pos: " + this.client.player.getBlockX() + " " + this.client.player.getBlockZ(), ++i);
             debug(matrixStack, "pow: " + pow, ++i);
             debug(matrixStack, "offset: " + this.offsetX + " " + this.offsetY, ++i);
             debug(matrixStack, "mouse: " + mouseX + " " + mouseY, ++i);
@@ -212,6 +217,17 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
             debug(matrixStack, "tile count: " + this.tiles.size(), ++i);
             debug(matrixStack, "loaded tile count: " + this.squaremap.getTileManager().count(), ++i);
         }
+    }
+
+    private void drawPlayerIcon(final PoseStack matrixStack, final float delta, final double size, final int xPos, final int zPos) {
+        matrixStack.pushPose();
+        final float x = (float) (this.worldToScreen(xPos, this.offsetX) - size / 2);
+        final float y = (float) (this.worldToScreen(zPos, this.offsetY) - size / 2);
+        final float angle = (this.client.player.getViewYRot(delta) - 180.0F) % 360.0F;
+        Util.rotateScene(matrixStack, (int) (x + size / 2), (int) (y + size / 2), angle);
+        this.squaremap.getTextureManager()
+            .drawTexture(matrixStack, TextureManager.SELF, x, y, (float) (x + size), (float) (y + size), 0F, 0F, 1F, 1F);
+        matrixStack.popPose();
     }
 
     private void debug(PoseStack matrixStack, String str, int y) {
