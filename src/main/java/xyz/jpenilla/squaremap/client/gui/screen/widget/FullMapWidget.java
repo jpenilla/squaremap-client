@@ -202,7 +202,7 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
         }
         matrixStack.popPose();
 
-        this.drawPlayerIcon(matrixStack, delta, size, this.client.player.getBlockX(), this.client.player.getBlockZ());
+        this.drawPlayerIcon(matrixStack, delta, size, this.client.player.getX(), this.client.player.getZ());
 
         if (DEBUG) {
             int i = -1;
@@ -219,12 +219,12 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
         }
     }
 
-    private void drawPlayerIcon(final PoseStack matrixStack, final float delta, final double size, final int xPos, final int zPos) {
+    private void drawPlayerIcon(final PoseStack matrixStack, final float delta, final double size, final double xPos, final double zPos) {
         matrixStack.pushPose();
         final float x = (float) (this.worldToScreen(xPos, this.offsetX) - size / 2);
         final float y = (float) (this.worldToScreen(zPos, this.offsetY) - size / 2);
         final float angle = (this.client.player.getViewYRot(delta) - 180.0F) % 360.0F;
-        Util.rotateScene(matrixStack, (int) (x + size / 2), (int) (y + size / 2), angle);
+        Util.rotateScene(matrixStack, x + size / 2, y + size / 2, angle);
         this.squaremap.getTextureManager()
             .drawTexture(matrixStack, TextureManager.SELF, x, y, (float) (x + size), (float) (y + size), 0F, 0F, 1F, 1F);
         matrixStack.popPose();

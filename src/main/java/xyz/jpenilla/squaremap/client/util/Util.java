@@ -12,7 +12,7 @@ public final class Util {
         throw (X) t;
     }
 
-    public static void rotateScene(final PoseStack matrixStack, final int x, final int y, final float degrees) {
+    public static void rotateScene(final PoseStack matrixStack, final double x, final double y, final float degrees) {
         matrixStack.translate(x, y, 0);
         matrixStack.mulPose(Vector3f.ZP.rotationDegrees(degrees));
         matrixStack.translate(-x, -y, 0);
