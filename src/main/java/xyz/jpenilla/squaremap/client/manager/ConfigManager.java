@@ -1,26 +1,23 @@
 package xyz.jpenilla.squaremap.client.manager;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import net.fabricmc.loader.api.FabricLoader;
-import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import xyz.jpenilla.squaremap.client.config.Config;
+import xyz.jpenilla.squaremap.client.util.Util;
 
 public class ConfigManager {
-    private final Gson gson = new GsonBuilder()
-        .disableHtmlEscaping()
-        .serializeNulls()
-        .setLenient()
-        .setPrettyPrinting()
-        .create();
-
     private Path configFile;
     private Config config;
+
+    private static HoconConfigurationLoader loader(final Path path) {
+        return HoconConfigurationLoader.builder()
+            .path(path)
+            .build();
+    }
 
     public Config getConfig() {
         if (this.config == null) {
@@ -30,32 +27,30 @@ public class ConfigManager {
     }
 
     public void reload() {
+        final Path file;
         try {
-            Path file = this.getConfigFile();
-            if (!Files.exists(file)) {
-                try (final InputStream stream = SquaremapClientInitializer.class.getResourceAsStream("/squaremap-client.json")) {
-                    if (stream == null) {
-                        throw new IllegalStateException("Could not extract default configuration from jar");
-                    }
-                    Files.copy(stream, file.toAbsolutePath());
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            file = this.getConfigFile();
+        } catch (final IOException e) {
+            throw Util.rethrow(e);
         }
 
-        try (final BufferedReader reader = Files.newBufferedReader(this.configFile)) {
-            this.config = this.gson.fromJson(reader, Config.class);
+        try {
+            final HoconConfigurationLoader loader = loader(file);
+            final CommentedConfigurationNode node = loader.load();
+            this.config = node.get(Config.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            Util.rethrow(e);
         }
     }
 
     public void save() {
+        final HoconConfigurationLoader loader = loader(this.configFile);
+        final CommentedConfigurationNode node = loader.createNode();
         try {
-            Files.writeString(this.configFile, this.gson.toJson(this.config));
-        } catch (IOException e) {
-            e.printStackTrace();
+            node.set(this.config);
+            loader.save(node);
+        } catch (final IOException e) {
+            Util.rethrow(e);
         }
     }
 
@@ -65,14 +60,21 @@ public class ConfigManager {
         }
         final Path configDir = FabricLoader.getInstance().getConfigDir();
 
-        this.configFile = configDir.resolve("squaremap-client.json");
+        this.configFile = configDir.resolve("squaremap-client.conf");
 
         // check for old configs
         if (!Files.isRegularFile(this.configFile)) {
-            final Path oldConfig = FabricLoader.getInstance().getConfigDir().resolve("pl3xmap.json");
-            if (Files.isRegularFile(oldConfig)) {
-                Files.copy(oldConfig, this.configFile);
-                Files.move(oldConfig, oldConfig.resolveSibling(oldConfig.getFileName().toString() + ".bak"));
+            final Path pl3xConfig = FabricLoader.getInstance().getConfigDir().resolve("pl3xmap.json");
+            if (Files.isRegularFile(pl3xConfig)) {
+                Files.copy(pl3xConfig, this.configFile);
+                Files.move(pl3xConfig, pl3xConfig.resolveSibling(pl3xConfig.getFileName().toString() + ".bak"));
+                return this.configFile;
+            }
+
+            final Path oldSquaremapConfig = FabricLoader.getInstance().getConfigDir().resolve("squaremap-client.json");
+            if (Files.isRegularFile(oldSquaremapConfig)) {
+                Files.copy(oldSquaremapConfig, this.configFile);
+                Files.move(oldSquaremapConfig, oldSquaremapConfig.resolveSibling(oldSquaremapConfig.getFileName().toString() + ".bak"));
             }
         }
 

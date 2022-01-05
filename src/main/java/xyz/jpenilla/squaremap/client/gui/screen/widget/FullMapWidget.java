@@ -38,11 +38,15 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
 
     private long lastClick;
 
+    private boolean showSelf;
+
     public FullMapWidget(SquaremapClientInitializer squaremap, Minecraft client, int width, int height) {
         this.squaremap = squaremap;
         this.client = client;
         this.width = width;
         this.height = height;
+
+        this.showSelf = this.squaremap.getConfig().fullMap().showSelf();
 
         this.world = this.squaremap.getWorld();
         this.zoom = this.world.zoomDefault();
@@ -202,7 +206,10 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
         }
         matrixStack.popPose();
 
-        this.drawPlayerIcon(matrixStack, delta, size, this.client.player.getX(), this.client.player.getZ());
+        if (this.showSelf) {
+            final double playerSize = Tile.SIZE / this.client.getWindow().getGuiScale() * 2;
+            this.drawPlayerIcon(matrixStack, delta, playerSize, this.client.player.getX(), this.client.player.getZ());
+        }
 
         if (DEBUG) {
             int i = -1;
@@ -246,5 +253,13 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
 
     @Override
     public void updateNarration(NarrationElementOutput builder) {
+    }
+
+    public boolean showSelf() {
+        return this.showSelf;
+    }
+
+    public void showSelf(boolean showSelf) {
+        this.showSelf = showSelf;
     }
 }

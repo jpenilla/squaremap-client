@@ -27,6 +27,7 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:0.12.12")
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.45.0+1.18")
     modImplementation("com.terraformersmc:modmenu:3.0.0")
+    modImplementation(include("ca.stellardrift", "confabricate", "2.1.0"))
 }
 
 tasks {

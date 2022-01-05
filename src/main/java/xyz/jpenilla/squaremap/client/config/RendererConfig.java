@@ -1,15 +1,13 @@
 package xyz.jpenilla.squaremap.client.config;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.meta.Setting;
 
+@ConfigSerializable
 public class RendererConfig {
-    @SerializedName("enabled")
-    @Expose
-    private boolean enabled;
-    @SerializedName("fogOfWar")
-    @Expose
-    private boolean fogOfWar;
+    private boolean enabled = true;
+    @Setting("fogOfWar")
+    private boolean fogOfWar = true;
 
     public boolean getEnabled() {
         return this.enabled;

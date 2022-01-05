@@ -1,15 +1,12 @@
 package xyz.jpenilla.squaremap.client.config;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
+@ConfigSerializable
 public class Config {
-    @SerializedName("renderer")
-    @Expose
-    private RendererConfig renderer;
-    @SerializedName("minimap")
-    @Expose
-    private MiniMapConfig minimap;
+    private RendererConfig renderer = new RendererConfig();
+    private MiniMapConfig minimap = new MiniMapConfig();
+    private FullMap fullMap = new FullMap();
 
     public RendererConfig getRenderer() {
         return renderer;
@@ -25,5 +22,22 @@ public class Config {
 
     public void setMinimap(MiniMapConfig minimap) {
         this.minimap = minimap;
+    }
+
+    public FullMap fullMap() {
+        return this.fullMap;
+    }
+
+    @ConfigSerializable
+    public static final class FullMap {
+        private boolean showSelf = true;
+
+        public boolean showSelf() {
+            return this.showSelf;
+        }
+
+        public void showSelf(boolean showSelf) {
+            this.showSelf = showSelf;
+        }
     }
 }

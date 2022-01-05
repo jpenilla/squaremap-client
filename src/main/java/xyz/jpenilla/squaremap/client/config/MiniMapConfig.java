@@ -1,48 +1,30 @@
 package xyz.jpenilla.squaremap.client.config;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.meta.Setting;
 
+@ConfigSerializable
 public class MiniMapConfig {
-    @SerializedName("enabled")
-    @Expose
-    private boolean enabled;
-    @SerializedName("northLock")
-    @Expose
-    private boolean northLock;
-    @SerializedName("circular")
-    @Expose
-    private boolean circular;
-    @SerializedName("drawFrame")
-    @Expose
-    private boolean drawFrame;
-    @SerializedName("directions")
-    @Expose
-    private boolean directions;
-    @SerializedName("coordinates")
-    @Expose
-    private boolean coordinates;
-    @SerializedName("updateInterval")
-    @Expose
-    private int updateInterval;
-    @SerializedName("anchorX")
-    @Expose
-    private int anchorX;
-    @SerializedName("anchorZ")
-    @Expose
-    private int anchorZ;
-    @SerializedName("anchorOffsetX")
-    @Expose
-    private int anchorOffsetX;
-    @SerializedName("anchorOffsetZ")
-    @Expose
-    private int anchorOffsetZ;
-    @SerializedName("size")
-    @Expose
-    private int size;
-    @SerializedName("zoom")
-    @Expose
-    private int zoom;
+    private boolean enabled = true;
+    @Setting("northLock")
+    private boolean northLock = true;
+    private boolean circular = false;
+    @Setting("drawFrame")
+    private boolean drawFrame = false;
+    private boolean directions = true;
+    private boolean coordinates = false;
+    @Setting("updateInterval")
+    private int updateInterval = 5;
+    @Setting("anchorX")
+    private int anchorX = 100;
+    @Setting("anchorZ")
+    private int anchorZ = 0;
+    @Setting("anchorOffsetX")
+    private int anchorOffsetX = -72;
+    @Setting("anchorOffsetZ")
+    private int anchorOffsetZ = 72;
+    private int size = 128;
+    private int zoom = 3;
 
     public boolean getEnabled() {
         return this.enabled;

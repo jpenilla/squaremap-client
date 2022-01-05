@@ -11,6 +11,9 @@
   "squaremap-client.screen.full-map.options": "Settings",
   "squaremap-client.screen.full-map.options.tooltip": "Configure the squaremap options",
 
+  "squaremap-client.screen.full-map.show-self": "Show self",
+  "squaremap-client.screen.full-map.show-self.tooltip": "Toggle whether a self marker should be rendered on the full map",
+
   "squaremap-client.screen.position.size": "Size: %s Zoom: %s",
   "squaremap-client.screen.position.center": "Position: %s, %s",
   "squaremap-client.screen.position.help1": "Drag the minimap to position",

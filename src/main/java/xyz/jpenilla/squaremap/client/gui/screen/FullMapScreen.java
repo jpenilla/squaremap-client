@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
+import xyz.jpenilla.squaremap.client.config.options.BooleanOption;
 import xyz.jpenilla.squaremap.client.gui.screen.widget.Button;
 import xyz.jpenilla.squaremap.client.gui.screen.widget.Coordinates;
 import xyz.jpenilla.squaremap.client.gui.screen.widget.FullMapWidget;
@@ -24,6 +25,9 @@ public class FullMapScreen extends AbstractScreen {
     private static final Component ZOOM_IN = Component.nullToEmpty("+");
     private static final Component ZOOM_OUT = Component.nullToEmpty("-");
     private static final Component LINK = Component.nullToEmpty("?");
+
+    private static final Component SHOW_SELF = new TranslatableComponent("squaremap-client.screen.full-map.show-self");
+    private static final Component SHOW_SELF_TOOLTIP = new TranslatableComponent("squaremap-client.screen.full-map.show-self.tooltip");
 
     private static final Component BLANK = Component.nullToEmpty("");
 
@@ -67,7 +71,20 @@ public class FullMapScreen extends AbstractScreen {
             new Button(this, 5, this.height - 25, 20, 20, LINK, BLANK, (button) -> this.openURL = this.fullmap.getUrl()),
             new Coordinates(this.fullmap, 30, this.height - 25, 50, 20),
             // TODO sidebar for world and player select
-            new Button(this, this.width - 87, this.height - 25, 80, 20, OPTIONS, OPTIONS_TOOLTIP, (button) -> openScreen(new OptionsScreen(this.squaremap, this)))
+            new Button(this, this.width - 87, this.height - 25, 80, 20, OPTIONS, OPTIONS_TOOLTIP, (button) -> openScreen(new OptionsScreen(this.squaremap, this))),
+            new Button(this, this.width - 107, 5, 100, 20, new BooleanOption(
+                SHOW_SELF, SHOW_SELF_TOOLTIP,
+                () -> this.fullmap.showSelf(),
+                value -> {
+                    this.fullmap.showSelf(value);
+                    this.squaremap.getConfig().fullMap().showSelf(value);
+                }
+            )) {
+                @Override
+                public Component displayText() {
+                    return this.option().getValue() ? OptionsScreen.YES : OptionsScreen.NO;
+                }
+            }
         ).forEach(this::addRenderableWidget);
 
         this.confirmLink.clear();

@@ -42,10 +42,10 @@ public class OptionsScreen extends AbstractScreen {
     private static final Component POSITION_SIZE_ZOOM_TOOLTIP = new TranslatableComponent("squaremap-client.screen.options.minimap.position-size-zoom.tooltip");
     private static final Component POSITION_SIZE_ZOOM_ERROR = new TranslatableComponent("squaremap-client.screen.options.minimap.position-size-zoom.error").withStyle(ChatFormatting.RED);
 
-    private static final Component ON = CommonComponents.OPTION_ON.copy().withStyle(ChatFormatting.GREEN);
-    private static final Component OFF = CommonComponents.OPTION_OFF.copy().withStyle(ChatFormatting.RED);
-    private static final Component YES = CommonComponents.GUI_YES.copy().withStyle(ChatFormatting.GREEN);
-    private static final Component NO = CommonComponents.GUI_NO.copy().withStyle(ChatFormatting.RED);
+    public static final Component ON = CommonComponents.OPTION_ON.copy().withStyle(ChatFormatting.GREEN);
+    public static final Component OFF = CommonComponents.OPTION_OFF.copy().withStyle(ChatFormatting.RED);
+    public static final Component YES = CommonComponents.GUI_YES.copy().withStyle(ChatFormatting.GREEN);
+    public static final Component NO = CommonComponents.GUI_NO.copy().withStyle(ChatFormatting.RED);
 
     public OptionsScreen(Screen parent) {
         this(SquaremapClientInitializer.instance(), parent);
