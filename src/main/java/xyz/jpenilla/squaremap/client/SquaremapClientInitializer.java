@@ -56,12 +56,8 @@ public class SquaremapClientInitializer implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         if (this.configManager.getConfig() == null) {
-            try {
-                throw new IllegalStateException("Could not load squaremap-client configuration");
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-                return;
-            }
+            new IllegalStateException("Could not load squaremap-client configuration").printStackTrace();
+            return;
         }
 
         this.networkManager.initialize();

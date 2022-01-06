@@ -41,6 +41,8 @@ public class ConfigManager {
         } catch (IOException e) {
             Util.rethrow(e);
         }
+
+        this.save();
     }
 
     public void save() {
