@@ -34,7 +34,11 @@ public class MiniMapWidget extends AbstractWidget {
 
     @Override
     public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
+        matrixStack.pushPose();
+        // we don't want to tuck this one behind anything
+        matrixStack.translate(0.0D, 0.0D, 999.9D);
         this.minimap.render(matrixStack, delta);
+        matrixStack.popPose();
     }
 
     @Override

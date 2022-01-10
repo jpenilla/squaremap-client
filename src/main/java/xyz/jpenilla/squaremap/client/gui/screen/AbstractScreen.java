@@ -3,11 +3,15 @@ package xyz.jpenilla.squaremap.client.gui.screen;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
+import xyz.jpenilla.squaremap.client.gui.screen.widget.Tickable;
 import xyz.jpenilla.squaremap.client.keyboard.Key;
 import xyz.jpenilla.squaremap.client.scheduler.Task;
 
@@ -15,6 +19,8 @@ public abstract class AbstractScreen extends Screen {
     final SquaremapClientInitializer squaremap;
     final Screen parent;
     final KeyHandler keyHandler;
+
+    List<AbstractWidget> options;
 
     protected AbstractScreen(SquaremapClientInitializer squaremap, Screen parent) {
         super(new TranslatableComponent("squaremap-client.screen.options.title"));
@@ -35,6 +41,17 @@ public abstract class AbstractScreen extends Screen {
             this.fillGradient(matrixStack, 0, 0, this.width, this.height, 0xD00F4863, 0xC0370038);
         } else {
             this.renderDirtBackground(vOffset);
+        }
+    }
+
+    @Override
+    public void tick() {
+        if (this.options != null) {
+            this.options.forEach(option -> {
+                if (option instanceof Tickable tickable) {
+                    tickable.tick();
+                }
+            });
         }
     }
 

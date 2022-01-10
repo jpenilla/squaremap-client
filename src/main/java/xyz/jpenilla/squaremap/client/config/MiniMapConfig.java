@@ -25,6 +25,9 @@ public class MiniMapConfig {
     private int anchorOffsetZ = 72;
     private int size = 128;
     private int zoom = 3;
+    private boolean showClock = false;
+    private boolean clockRealTime = false;
+    private boolean clock24Hrs = true;
 
     public boolean getEnabled() {
         return this.enabled;
@@ -128,5 +131,29 @@ public class MiniMapConfig {
 
     public void setZoom(int zoom) {
         this.zoom = zoom;
+    }
+
+    public boolean getShowClock() {
+        return this.showClock;
+    }
+
+    public void setShowClock(boolean showClock) {
+        this.showClock = showClock;
+    }
+
+    public boolean getClockRealTime() {
+        return this.clockRealTime;
+    }
+
+    public void setClockRealTime(boolean clockRealTime) {
+        this.clockRealTime = clockRealTime;
+    }
+
+    public boolean getClock24Hrs() {
+        return this.clock24Hrs;
+    }
+
+    public void setClock24Hrs(boolean clock24hrs) {
+        this.clock24Hrs = clock24hrs;
     }
 }

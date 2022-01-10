@@ -16,6 +16,7 @@ import xyz.jpenilla.squaremap.client.scheduler.Task;
 import xyz.jpenilla.squaremap.client.tiles.Tile;
 import xyz.jpenilla.squaremap.client.util.Image;
 import xyz.jpenilla.squaremap.client.util.Util;
+import xyz.jpenilla.squaremap.client.util.WorldTime;
 
 public class MiniMap {
     private final static int MAP_SIZE = 512;
@@ -43,6 +44,9 @@ public class MiniMap {
     private boolean showFrame;
     private boolean showCoordinates;
     private boolean showDirections;
+    private boolean showClock;
+    private boolean clockRealTime;
+    private boolean clock24Hrs;
 
     private Anchor anchorX;
     private Anchor anchorZ;
@@ -131,6 +135,9 @@ public class MiniMap {
         this.showFrame = config.getDrawFrame();
         this.showCoordinates = config.getCoordinates();
         this.showDirections = config.getDirections();
+        this.showClock = config.getShowClock();
+        this.clockRealTime = config.getClockRealTime();
+        this.clock24Hrs = config.getClock24Hrs();
 
         setZoomLevel(config.getZoom());
 
@@ -265,6 +272,18 @@ public class MiniMap {
 
     public void setShowDirections(boolean value) {
         this.showDirections = value;
+    }
+
+    public void setShowClock(boolean value) {
+        this.showClock = value;
+    }
+
+    public void setClockRealTime(boolean value) {
+        this.clockRealTime = value;
+    }
+
+    public void setClock24Hrs(boolean value) {
+        this.clock24Hrs = value;
     }
 
     public void setCircular(boolean value) {
@@ -474,11 +493,23 @@ public class MiniMap {
             matrixStack.popPose();
         }
 
+        // offset for clock if coordinates drawn
+        int clockOffsetZ = 0;
+
         // draw coordinates
         if (this.showCoordinates) {
+            clockOffsetZ = 12;
             matrixStack.pushPose();
             matrixStack.scale(this.textScale, this.textScale, this.textScale);
             text(matrixStack, String.format("%s, %s, %s", (int) Math.floor(this.player.getX()), (int) Math.floor(this.player.getY()), (int) Math.floor(this.player.getZ())), this.textX, this.textZ + 8);
+            matrixStack.popPose();
+        }
+
+        // draw clock
+        if (this.showClock) {
+            matrixStack.pushPose();
+            matrixStack.scale(this.textScale, this.textScale, this.textScale);
+            text(matrixStack, WorldTime.getInstance().getWorldTime(this.player.level, this.clockRealTime, this.clock24Hrs), this.textX, this.textZ + 8 + clockOffsetZ);
             matrixStack.popPose();
         }
 

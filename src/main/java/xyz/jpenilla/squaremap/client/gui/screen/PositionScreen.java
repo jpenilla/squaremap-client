@@ -27,7 +27,7 @@ public class PositionScreen extends AbstractScreen {
         this.keyHandler.listen(GLFW.GLFW_KEY_KP_ADD, () -> this.minimap.addSize(16));
         this.keyHandler.listen(GLFW.GLFW_KEY_KP_SUBTRACT, () -> this.minimap.addSize(-16));
 
-        // hide minimap so we're not drawing it twice
+        // hide real minimap so we're not drawing it twice
         this.minimap.setVisible(false);
     }
 
