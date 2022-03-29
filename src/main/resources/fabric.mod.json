@@ -6,8 +6,7 @@
   "description": "squaremap is a minimalistic and lightweight world map viewer for Paper servers using the vanilla Minecraft rendering style.\nThis mod replaces in-game maps using the squaremap tiles to make them look better.\nOther features include\n  * MiniMap HUD\n  * Full screen map viewer",
   "authors": [
     "jmp",
-    "BillyGalbreath",
-    "Benonardo"
+    "BillyGalbreath"
   ],
   "contact": {
     "homepage": "https://github.com/jpenilla/squaremap-client",
@@ -30,7 +29,7 @@
   ],
   "accessWidener": "squaremap-client.accesswidener",
   "depends": {
-    "fabricloader": ">=0.12.12",
+    "fabricloader": ">=0.13.3",
     "fabric": "*",
     "minecraft": "1.18.x"
   },
