@@ -5,7 +5,7 @@ plugins {
 group = "xyz.jpenilla.squaremap.client"
 version = "1.4.0-SNAPSHOT"
 
-val mcVersion = "1.18.2"
+val mcVersion = "1.19"
 
 java {
     toolchain {
@@ -27,9 +27,9 @@ repositories {
 dependencies {
     minecraft("com.mojang:minecraft:$mcVersion")
     mappings(loom.officialMojangMappings())
-    modImplementation("net.fabricmc:fabric-loader:0.13.3")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.48.0+1.18.2")
-    modImplementation("com.terraformersmc:modmenu:3.1.0")
+    modImplementation("net.fabricmc:fabric-loader:0.14.8")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.56.1+1.19")
+    modImplementation("com.terraformersmc:modmenu:4.0.0")
     modImplementation(include("ca.stellardrift", "confabricate", "3.0.0-SNAPSHOT"))
 }
 

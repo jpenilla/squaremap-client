@@ -74,8 +74,7 @@ public class TextureManager {
         bufferBuilder.vertex(model, x1, y1, 0F).uv(u1, v1).endVertex();
         bufferBuilder.vertex(model, x1, y0, 0F).uv(u1, v0).endVertex();
         bufferBuilder.vertex(model, x0, y0, 0F).uv(u0, v0).endVertex();
-        bufferBuilder.end();
-        BufferUploader.end(bufferBuilder);
+        BufferUploader.drawWithShader(bufferBuilder.end());
     }
 
     public ResourceLocation getTexture(Level world) {

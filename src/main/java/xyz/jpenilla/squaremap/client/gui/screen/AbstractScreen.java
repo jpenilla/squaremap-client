@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
 import xyz.jpenilla.squaremap.client.keyboard.Key;
 import xyz.jpenilla.squaremap.client.scheduler.Task;
@@ -17,7 +16,7 @@ public abstract class AbstractScreen extends Screen {
     final KeyHandler keyHandler;
 
     protected AbstractScreen(SquaremapClientInitializer squaremap, Screen parent) {
-        super(new TranslatableComponent("squaremap-client.screen.options.title"));
+        super(Component.translatable("squaremap-client.screen.options.title"));
         this.squaremap = squaremap;
         this.parent = parent;
         this.keyHandler = new KeyHandler();

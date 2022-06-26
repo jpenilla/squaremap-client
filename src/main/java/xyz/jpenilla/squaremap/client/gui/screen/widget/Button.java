@@ -8,7 +8,6 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.FormattedCharSequence;
 import xyz.jpenilla.squaremap.client.config.options.BooleanOption;
 
@@ -72,9 +71,9 @@ public class Button extends AbstractButton implements Tickable {
 
     public void updateMessage() {
         if (this.option != null) {
-            final MutableComponent msg = new TextComponent("");
+            final MutableComponent msg = Component.literal("");
             msg.append(this.option.getName());
-            msg.append(new TextComponent(": "));
+            msg.append(Component.literal(": "));
             msg.append(this.displayText());
             this.setMessage(msg);
         }
@@ -85,7 +84,7 @@ public class Button extends AbstractButton implements Tickable {
     }
 
     public Component displayText() {
-        return new TextComponent(this.option.getValue().toString());
+        return Component.literal(this.option.getValue().toString());
     }
 
     @FunctionalInterface

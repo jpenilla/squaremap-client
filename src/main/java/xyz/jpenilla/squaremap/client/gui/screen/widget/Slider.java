@@ -126,7 +126,7 @@ public class Slider extends AbstractWidget implements Tickable {
     }
 
     private void updateMessage() {
-        setMessage(Component.nullToEmpty(this.option.getName().getString() + ": " + this.option.getValue()));
+        setMessage(Component.literal(this.option.getName().getString() + ": " + this.option.getValue()));
     }
 
     @Override

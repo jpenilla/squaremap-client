@@ -10,7 +10,6 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
 import xyz.jpenilla.squaremap.client.config.options.BooleanOption;
@@ -19,22 +18,22 @@ import xyz.jpenilla.squaremap.client.gui.screen.widget.Coordinates;
 import xyz.jpenilla.squaremap.client.gui.screen.widget.FullMapWidget;
 
 public class FullMapScreen extends AbstractScreen {
-    private static final Component OPTIONS = new TranslatableComponent("squaremap-client.screen.full-map.options");
-    private static final Component OPTIONS_TOOLTIP = new TranslatableComponent("squaremap-client.screen.full-map.options.tooltip");
+    private static final Component OPTIONS = Component.translatable("squaremap-client.screen.full-map.options");
+    private static final Component OPTIONS_TOOLTIP = Component.translatable("squaremap-client.screen.full-map.options.tooltip");
 
-    private static final Component ZOOM_IN = Component.nullToEmpty("+");
-    private static final Component ZOOM_OUT = Component.nullToEmpty("-");
-    private static final Component LINK = Component.nullToEmpty("?");
+    private static final Component ZOOM_IN = Component.literal("+");
+    private static final Component ZOOM_OUT = Component.literal("-");
+    private static final Component LINK = Component.literal("?");
 
-    private static final Component SHOW_SELF = new TranslatableComponent("squaremap-client.screen.full-map.show-self");
-    private static final Component SHOW_SELF_TOOLTIP = new TranslatableComponent("squaremap-client.screen.full-map.show-self.tooltip");
+    private static final Component SHOW_SELF = Component.translatable("squaremap-client.screen.full-map.show-self");
+    private static final Component SHOW_SELF_TOOLTIP = Component.translatable("squaremap-client.screen.full-map.show-self.tooltip");
 
-    private static final Component BLANK = Component.nullToEmpty("");
+    private static final Component BLANK = Component.empty();
 
-    private static final Component LINK_CONFIRMATION = new TranslatableComponent("chat.link.confirmTrusted");
+    private static final Component LINK_CONFIRMATION = Component.translatable("chat.link.confirmTrusted");
 
-    private static final Component OPEN = new TranslatableComponent("chat.link.open");
-    private static final Component COPY = new TranslatableComponent("chat.copy");
+    private static final Component OPEN = Component.translatable("chat.link.open");
+    private static final Component COPY = Component.translatable("chat.copy");
     private static final Component CANCEL = CommonComponents.GUI_CANCEL;
 
     private final List<GuiEventListener> reverse = new ArrayList<>();
@@ -168,13 +167,13 @@ public class FullMapScreen extends AbstractScreen {
     }
 
     private void openLink() {
-        Util.getPlatform().openUri(this.openURL.getContents());
+        Util.getPlatform().openUri(this.openURL.getString());
         this.openURL = null;
     }
 
     private void copyLink() {
         if (this.minecraft != null) {
-            this.minecraft.keyboardHandler.setClipboard(this.openURL.getContents());
+            this.minecraft.keyboardHandler.setClipboard(this.openURL.getString());
         }
         this.openURL = null;
     }

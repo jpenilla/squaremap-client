@@ -13,7 +13,6 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import xyz.jpenilla.squaremap.client.mixin.ToastAccess;
 
 public class Coordinates extends GuiComponent implements Widget, GuiEventListener, NarratableEntry {
@@ -35,7 +34,7 @@ public class Coordinates extends GuiComponent implements Widget, GuiEventListene
     public Component getCoordinates(int mouseX, int mouseY) {
         String x = NUMBER.format(this.fullmap.getPosX(mouseX));
         String y = NUMBER.format(this.fullmap.getPosY(mouseY));
-        return new TranslatableComponent("%s %s", x, y);
+        return Component.translatable("%s %s", x, y);
     }
 
     @Override

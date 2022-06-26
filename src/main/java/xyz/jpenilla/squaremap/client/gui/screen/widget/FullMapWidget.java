@@ -10,7 +10,6 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
 import xyz.jpenilla.squaremap.client.manager.TextureManager;
 import xyz.jpenilla.squaremap.client.tiles.Tile;
@@ -154,7 +153,7 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
     }
 
     public Component getUrl() {
-        return new TextComponent(String.format("%s/?world=%s&zoom=%s&x=%s&z=%s",
+        return Component.literal(String.format("%s/?world=%s&zoom=%s&x=%s&z=%s",
             this.squaremap.getServerManager().getUrl(),
             this.world.name(),
             this.zoom,
