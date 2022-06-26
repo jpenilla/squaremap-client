@@ -78,12 +78,7 @@ public class FullMapScreen extends AbstractScreen {
                     this.fullmap.showSelf(value);
                     this.squaremap.getConfig().fullMap().showSelf(value);
                 }
-            )) {
-                @Override
-                public Component displayText() {
-                    return this.option().getValue() ? OptionsScreen.YES : OptionsScreen.NO;
-                }
-            }
+            ), OptionsScreen::yesNo)
         ).forEach(this::addRenderableWidget);
 
         this.confirmLink.clear();

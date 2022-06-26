@@ -70,22 +70,12 @@ public class OptionsScreen extends AbstractScreen {
                     this.squaremap.getConfig().getRenderer().setEnabled(value);
                     this.squaremap.setRendererEnabled(value);
                 }
-            )) {
-                @Override
-                public Component displayText() {
-                    return option().getValue() ? ON : OFF;
-                }
-            },
+            ), OptionsScreen::onOff),
             new Button(this, center + 4, 65, 150, 20, new BooleanOption(
                 FOG_OF_WAR, FOG_OF_WAR_TOOLTIP,
                 () -> this.squaremap.getConfig().getRenderer().getFogOfWar(),
                 value -> this.squaremap.getConfig().getRenderer().setFogOfWar(value)
-            )) {
-                @Override
-                public Component displayText() {
-                    return option().getValue() ? ON : OFF;
-                }
-            },
+            ), OptionsScreen::onOff),
             new Button(this, center - 154, 110, 150, 20, new BooleanOption(
                 MINIMAP_ENABLED, MINIMAP_ENABLED_TOOLTIP,
                 () -> this.squaremap.getConfig().getMinimap().getEnabled(),
@@ -97,12 +87,7 @@ public class OptionsScreen extends AbstractScreen {
                         this.squaremap.getMiniMap().disable();
                     }
                 }
-            )) {
-                @Override
-                public Component displayText() {
-                    return option().getValue() ? YES : NO;
-                }
-            },
+            ), OptionsScreen::yesNo),
             new Button(this, center + 4, 110, 150, 20, new BooleanOption(
                 NORTH_LOCKED, NORTH_LOCKED_TOOLTIP,
                 () -> this.squaremap.getConfig().getMinimap().getNorthLock(),
@@ -110,12 +95,7 @@ public class OptionsScreen extends AbstractScreen {
                     this.squaremap.getConfig().getMinimap().setNorthLock(value);
                     this.squaremap.getMiniMap().setNorthLocked(value);
                 }
-            )) {
-                @Override
-                public Component displayText() {
-                    return option().getValue() ? YES : NO;
-                }
-            },
+            ), OptionsScreen::yesNo),
             new Button(this, center - 154, 135, 150, 20, new BooleanOption(
                 FRAME, FRAME_TOOLTIP,
                 () -> this.squaremap.getConfig().getMinimap().getDrawFrame(),
@@ -123,12 +103,7 @@ public class OptionsScreen extends AbstractScreen {
                     this.squaremap.getConfig().getMinimap().setDrawFrame(value);
                     this.squaremap.getMiniMap().setShowFrame(value);
                 }
-            )) {
-                @Override
-                public Component displayText() {
-                    return option().getValue() ? ON : OFF;
-                }
-            },
+            ), OptionsScreen::onOff),
             new Button(this, center + 4, 135, 150, 20, new BooleanOption(
                 CIRCULAR, CIRCULAR_TOOLTIP,
                 () -> this.squaremap.getConfig().getMinimap().getCircular(),
@@ -136,12 +111,7 @@ public class OptionsScreen extends AbstractScreen {
                     this.squaremap.getConfig().getMinimap().setCircular(value);
                     this.squaremap.getMiniMap().setCircular(value);
                 }
-            )) {
-                @Override
-                public Component displayText() {
-                    return option().getValue() ? YES : NO;
-                }
-            },
+            ), OptionsScreen::yesNo),
             new Button(this, center - 154, 160, 150, 20, new BooleanOption(
                 DIRECTIONS, DIRECTIONS_TOOLTIP,
                 () -> this.squaremap.getConfig().getMinimap().getDirections(),
@@ -149,12 +119,7 @@ public class OptionsScreen extends AbstractScreen {
                     this.squaremap.getConfig().getMinimap().setDirections(value);
                     this.squaremap.getMiniMap().setShowDirections(value);
                 }
-            )) {
-                @Override
-                public Component displayText() {
-                    return option().getValue() ? ON : OFF;
-                }
-            },
+            ), OptionsScreen::onOff),
             new Button(this, center + 4, 160, 150, 20, new BooleanOption(
                 COORDINATES, COORDINATES_TOOLTIP,
                 () -> this.squaremap.getConfig().getMinimap().getCoordinates(),
@@ -162,12 +127,7 @@ public class OptionsScreen extends AbstractScreen {
                     this.squaremap.getConfig().getMinimap().setCoordinates(value);
                     this.squaremap.getMiniMap().setShowCoordinates(value);
                 }
-            )) {
-                @Override
-                public Component displayText() {
-                    return option().getValue() ? ON : OFF;
-                }
-            },
+            ), OptionsScreen::onOff),
             new Slider(this, center - 154, 185, 150, 20, new IntegerOption(
                 UPDATE_INTERVAL, UPDATE_INTERVAL_TOOLTIP, 0, 20,
                 () -> this.squaremap.getConfig().getMinimap().getUpdateInterval(),
@@ -220,5 +180,13 @@ public class OptionsScreen extends AbstractScreen {
                 tickable.tick();
             }
         });
+    }
+
+    public static Component onOff(final Button button) {
+        return button.option().getValue() ? ON : OFF;
+    }
+
+    public static Component yesNo(final Button button) {
+        return button.option().getValue() ? YES : NO;
     }
 }

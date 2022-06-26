@@ -2,6 +2,7 @@ package xyz.jpenilla.squaremap.client.gui.screen.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.List;
+import java.util.function.Function;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -16,22 +17,24 @@ public class Button extends AbstractButton implements Tickable {
     private final Component tooltip;
     private final PressAction onPress;
     private final BooleanOption option;
+    private final Function<Button, Component> displayText;
     private int tooltipDelay;
 
-    public Button(Screen screen, int x, int y, int width, int height, BooleanOption option) {
-        this(screen, x, y, width, height, option.getName(), option.tooltip(), option.onPress(), option);
+    public Button(Screen screen, int x, int y, int width, int height, BooleanOption option, Function<Button, Component> displayText) {
+        this(screen, x, y, width, height, option.getName(), option.tooltip(), option.onPress(), option, displayText);
     }
 
     public Button(Screen screen, int x, int y, int width, int height, Component name, Component tooltip, PressAction onPress) {
-        this(screen, x, y, width, height, name, tooltip, onPress, null);
+        this(screen, x, y, width, height, name, tooltip, onPress, null, null);
     }
 
-    public Button(Screen screen, int x, int y, int width, int height, Component name, Component tooltip, PressAction onPress, BooleanOption option) {
+    public Button(Screen screen, int x, int y, int width, int height, Component name, Component tooltip, PressAction onPress, BooleanOption option, Function<Button, Component> displayText) {
         super(x, y, width, height, name);
         this.screen = screen;
         this.tooltip = tooltip;
         this.option = option;
         this.onPress = onPress;
+        this.displayText = displayText;
 
         this.updateMessage();
     }
@@ -84,6 +87,9 @@ public class Button extends AbstractButton implements Tickable {
     }
 
     public Component displayText() {
+        if (this.displayText != null) {
+            return this.displayText.apply(this);
+        }
         return Component.literal(this.option.getValue().toString());
     }
 
