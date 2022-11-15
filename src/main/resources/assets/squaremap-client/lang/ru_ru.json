@@ -1,0 +1,52 @@
+{
+  "squaremap-client.plugin.link": "Серверный плагин",
+
+  "squaremap-client.key.category": "squaremap",
+  "squaremap-client.key.full-map.open": "Открыть полноэкранную карту",
+  "squaremap-client.key.options.open": "Открыть меню настроек карты",
+  "squaremap-client.key.minimap.zoom.increase": "Увеличение масштаба миникарты",
+  "squaremap-client.key.minimap.zoom.decrease": "Уменьшение масштаба миникарты",
+  "squaremap-client.key.minimap.toggle": "Переключение миникарты",
+
+  "squaremap-client.screen.full-map.options": "Настройки",
+  "squaremap-client.screen.full-map.options.tooltip": "Настройка параметров squaremap",
+
+  "squaremap-client.screen.full-map.show-self": "Показать себя",
+  "squaremap-client.screen.full-map.show-self.tooltip": "Переключает вашу видимость на полной карте",
+
+  "squaremap-client.screen.position.size": "Размер: %s Масштаб: %s",
+  "squaremap-client.screen.position.center": "Позиция: %s, %s",
+  "squaremap-client.screen.position.help1": "Перетащите миникарту для изменения позиции",
+  "squaremap-client.screen.position.help2": "Колесо мыши для масштабирования",
+  "squaremap-client.screen.position.help3": "CTRL + колесико мыши для изменения размера",
+  "squaremap-client.screen.position.help4": "Нажмите ESC, когда закончите",
+
+  "squaremap-client.screen.options.title": "squaremap",
+
+  "squaremap-client.screen.options.renderer.title": "Рендер элементов карты",
+  "squaremap-client.screen.options.renderer.enabled": "Рендер карт",
+  "squaremap-client.screen.options.renderer.enabled.tooltip": "Переключение рендеринга внутриигровой карты",
+  "squaremap-client.screen.options.renderer.fog-of-war": "Туман войны",
+  "squaremap-client.screen.options.renderer.fog-of-war.tooltip": "Переключение тумана войны для рендера внутриигровой карты",
+
+  "squaremap-client.screen.options.minimap.title": "Настройки миникарты",
+  "squaremap-client.screen.options.minimap.enabled": "Миникарта включена",
+  "squaremap-client.screen.options.minimap.enabled.tooltip": "Включение/выключение миникарты",
+  "squaremap-client.screen.options.minimap.north-locked": "Положение миникарты с севером наверху",
+  "squaremap-client.screen.options.minimap.north-locked.tooltip": "Должна ли мини-карта фиксироваться так, чтобы север был направлен вверх",
+  "squaremap-client.screen.options.minimap.frame": "Рамка",
+  "squaremap-client.screen.options.minimap.frame.tooltip": "Показывает рамку вокруг миникарты",
+  "squaremap-client.screen.options.minimap.circular": "Круглая миникарта",
+  "squaremap-client.screen.options.minimap.circular.tooltip": "Выбор между круглой и квадратной формой миникарты",
+  "squaremap-client.screen.options.minimap.directions": "Направления",
+  "squaremap-client.screen.options.minimap.directions.tooltip": "Показывает направления вокруг миникарты",
+  "squaremap-client.screen.options.minimap.coordinates": "Координаты",
+  "squaremap-client.screen.options.minimap.coordinates.tooltip": "Показывает ваши координаты под миникартой",
+  "squaremap-client.screen.options.minimap.update-interval": "Интервал обновления",
+  "squaremap-client.screen.options.minimap.update-interval.tooltip": "Сколько тиков между обновлениями\nПримечание: Маленькие значения могут вызвать лаги",
+  "squaremap-client.screen.options.minimap.position-size-zoom": "Положение, размер, масштаб",
+  "squaremap-client.screen.options.minimap.position-size-zoom.tooltip": "Настройка положения, размера и масштаба миникарты",
+  "squaremap-client.screen.options.minimap.position-size-zoom.error": "Не удается загрузить миникарту...",
+
+  "squaremap-client.error.server.incompatible": "На этом сервере используется несовместимая версия squaremap!"
+}
