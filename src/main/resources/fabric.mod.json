@@ -14,7 +14,6 @@
     "sources": "https://github.com/jpenilla/squaremap-client"
   },
   "license": "MIT",
-  "icon": "assets/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
@@ -29,9 +28,9 @@
   ],
   "accessWidener": "squaremap-client.accesswidener",
   "depends": {
-    "fabricloader": ">=0.13.3",
+    "fabricloader": ">=0.14.0",
     "fabric": "*",
-    "minecraft": "~1.19"
+    "minecraft": "~1.20.2"
   },
   "conflicts": {
     "pl3xmap": "*"

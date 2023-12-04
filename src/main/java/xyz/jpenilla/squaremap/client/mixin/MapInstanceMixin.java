@@ -2,7 +2,7 @@ package xyz.jpenilla.squaremap.client.mixin;
 
 import net.minecraft.client.gui.MapRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -114,7 +114,7 @@ abstract class MapInstanceMixin implements MapTexture {
                     } else {
                         squaremapColor = this.image.getPixel(x, z);
                         if (squaremapColor == 0) {
-                            setPixelColor(x, z, /*MapColorAccessor.getColors()[color / 4]*/MaterialColor.getColorFromPackedId(color & 3));
+                            setPixelColor(x, z, /*MapColorAccessor.getColors()[color / 4]*/MapColor.getColorFromPackedId(color & 3));
                         } else {
                             setPixelColor(x, z, squaremapColor);
                         }

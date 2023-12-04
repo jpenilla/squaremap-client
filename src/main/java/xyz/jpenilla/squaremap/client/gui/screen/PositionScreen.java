@@ -1,6 +1,6 @@
 package xyz.jpenilla.squaremap.client.gui.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
@@ -37,21 +37,21 @@ public class PositionScreen extends AbstractScreen {
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
-        super.render(matrixStack, mouseX, mouseY, delta);
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+        super.render(guiGraphics, mouseX, mouseY, delta);
 
         int centerX = (int) (this.width / 2F);
         int centerY = (int) (this.height / 2F);
 
-        drawText(matrixStack, this.title, centerX, 15);
+        drawText(guiGraphics, this.title, centerX, 15);
 
-        drawText(matrixStack, Component.translatable("squaremap-client.screen.position.size", this.minimap.getSize(), this.minimap.getZoom()), centerX, 30);
-        drawText(matrixStack, Component.translatable("squaremap-client.screen.position.center", this.minimap.getCenterX(), this.minimap.getCenterZ()), centerX, 40);
+        drawText(guiGraphics, Component.translatable("squaremap-client.screen.position.size", this.minimap.getSize(), this.minimap.getZoom()), centerX, 30);
+        drawText(guiGraphics, Component.translatable("squaremap-client.screen.position.center", this.minimap.getCenterX(), this.minimap.getCenterZ()), centerX, 40);
 
-        drawText(matrixStack, HELP_1, centerX, centerY - 30);
-        drawText(matrixStack, HELP_2, centerX, centerY - 10);
-        drawText(matrixStack, HELP_3, centerX, centerY + 10);
-        drawText(matrixStack, HELP_4, centerX, centerY + 30);
+        drawText(guiGraphics, HELP_1, centerX, centerY - 30);
+        drawText(guiGraphics, HELP_2, centerX, centerY - 10);
+        drawText(guiGraphics, HELP_3, centerX, centerY + 10);
+        drawText(guiGraphics, HELP_4, centerX, centerY + 30);
     }
 
     @Override

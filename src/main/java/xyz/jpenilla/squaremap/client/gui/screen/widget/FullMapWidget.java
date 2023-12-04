@@ -4,10 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Widget;
-import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
@@ -16,7 +14,7 @@ import xyz.jpenilla.squaremap.client.tiles.Tile;
 import xyz.jpenilla.squaremap.client.util.Util;
 import xyz.jpenilla.squaremap.client.util.WorldInfo;
 
-public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry {
+public class FullMapWidget extends AbstractWidget {
     private static final boolean DEBUG = false;
 
     private final Set<Tile> tiles = new LinkedHashSet<>();
@@ -40,6 +38,7 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
     private boolean showSelf;
 
     public FullMapWidget(SquaremapClientInitializer squaremap, Minecraft client, int width, int height) {
+        super(0, 0, width, height, null);
         this.squaremap = squaremap;
         this.client = client;
         this.width = width;
@@ -93,8 +92,8 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        zoom(mouseX, mouseY, amount);
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        zoom(mouseX, mouseY, scrollY);
 
         return true;
     }
@@ -185,7 +184,8 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
+    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+        final PoseStack matrixStack = guiGraphics.pose();
         double extra = Math.pow(2, this.zoom > this.world.zoomMax() ? this.zoom - this.world.zoomMax() : 0);
         double pow = Math.pow(2, this.world.zoomMax() - this.zoom) * extra;
         double size = Tile.SIZE / this.client.getWindow().getGuiScale() * extra;
@@ -199,8 +199,8 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
             tile.render(matrixStack, x0, y0, x1, y1, 0F, 0F, 1F, 1F);
 
             if (DEBUG) {
-                GuiComponent.fill(matrixStack, (int) x0, (int) y0, (int) x0 + 1, (int) y1, 0x88888888);
-                GuiComponent.fill(matrixStack, (int) x0, (int) y0, (int) x1, (int) y0 + 1, 0x88888888);
+                guiGraphics.fill((int) x0, (int) y0, (int) x0 + 1, (int) y1, 0x88888888);
+                guiGraphics.fill((int) x0, (int) y0, (int) x1, (int) y0 + 1, 0x88888888);
             }
         }
         matrixStack.popPose();
@@ -212,16 +212,16 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
 
         if (DEBUG) {
             int i = -1;
-            debug(matrixStack, "player pos: " + this.client.player.getBlockX() + " " + this.client.player.getBlockZ(), ++i);
-            debug(matrixStack, "pow: " + pow, ++i);
-            debug(matrixStack, "offset: " + this.offsetX + " " + this.offsetY, ++i);
-            debug(matrixStack, "mouse: " + mouseX + " " + mouseY, ++i);
-            debug(matrixStack, "scale: " + getScale(), ++i);
-            debug(matrixStack, "zoom: " + this.zoom, ++i);
-            debug(matrixStack, "size: " + size, ++i);
-            debug(matrixStack, "window: " + width + " " + height, ++i);
-            debug(matrixStack, "tile count: " + this.tiles.size(), ++i);
-            debug(matrixStack, "loaded tile count: " + this.squaremap.getTileManager().count(), ++i);
+            debug(guiGraphics, "player pos: " + this.client.player.getBlockX() + " " + this.client.player.getBlockZ(), ++i);
+            debug(guiGraphics, "pow: " + pow, ++i);
+            debug(guiGraphics, "offset: " + this.offsetX + " " + this.offsetY, ++i);
+            debug(guiGraphics, "mouse: " + mouseX + " " + mouseY, ++i);
+            debug(guiGraphics, "scale: " + getScale(), ++i);
+            debug(guiGraphics, "zoom: " + this.zoom, ++i);
+            debug(guiGraphics, "size: " + size, ++i);
+            debug(guiGraphics, "window: " + width + " " + height, ++i);
+            debug(guiGraphics, "tile count: " + this.tiles.size(), ++i);
+            debug(guiGraphics, "loaded tile count: " + this.squaremap.getTileManager().count(), ++i);
         }
     }
 
@@ -236,14 +236,16 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
         matrixStack.popPose();
     }
 
-    private void debug(PoseStack matrixStack, String str, int y) {
-        this.client.font.drawShadow(matrixStack, Component.nullToEmpty(str), 10, 50 + 10 * y, 0xFFFFFFFF);
+    private void debug(GuiGraphics guiGraphics, String str, int y) {
+        guiGraphics.drawString(this.client.font, Component.nullToEmpty(str), 10, 50 + 10 * y, 0xFFFFFFFF);
     }
 
+    /*
     @Override
     public boolean changeFocus(boolean lookForwards) {
         return true;
     }
+     */
 
     @Override
     public NarrationPriority narrationPriority() {
@@ -251,7 +253,7 @@ public class FullMapWidget implements Widget, GuiEventListener, NarratableEntry 
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput builder) {
+    public void updateWidgetNarration(NarrationElementOutput builder) {
     }
 
     public boolean showSelf() {

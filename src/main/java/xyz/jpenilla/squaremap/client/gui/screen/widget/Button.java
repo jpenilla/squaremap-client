@@ -1,9 +1,9 @@
 package xyz.jpenilla.squaremap.client.gui.screen.widget;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.List;
 import java.util.function.Function;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
@@ -45,10 +45,10 @@ public class Button extends AbstractButton implements Tickable {
     }
 
     @Override
-    public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
-        super.renderButton(matrixStack, mouseX, mouseY, delta);
+    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+        super.renderWidget(guiGraphics, mouseX, mouseY, delta);
         if (this.isHoveredOrFocused() && this.tooltipDelay > 10) {
-            this.renderToolTip(matrixStack, mouseX, mouseY);
+            this.renderToolTip(guiGraphics, mouseX, mouseY);
         }
     }
 
@@ -61,14 +61,13 @@ public class Button extends AbstractButton implements Tickable {
         }
     }
 
-    @Override
-    public void renderToolTip(PoseStack matrixStack, int mouseX, int mouseY) {
+    public void renderToolTip(GuiGraphics graphics, int mouseX, int mouseY) {
         List<FormattedCharSequence> tooltip = Minecraft.getInstance().font.split(this.tooltip, 150);
-        this.screen.renderTooltip(matrixStack, tooltip, mouseX, mouseY);
+        graphics.renderTooltip(Minecraft.getInstance().font, tooltip, mouseX, mouseY);
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput builder) {
+    public void updateWidgetNarration(NarrationElementOutput builder) {
         this.defaultButtonNarrationText(builder);
     }
 

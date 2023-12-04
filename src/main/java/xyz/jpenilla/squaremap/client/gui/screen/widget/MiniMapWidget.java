@@ -1,6 +1,6 @@
 package xyz.jpenilla.squaremap.client.gui.screen.widget;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
@@ -18,7 +18,7 @@ public class MiniMapWidget extends AbstractWidget {
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput builder) {
+    public void updateWidgetNarration(NarrationElementOutput builder) {
         this.defaultButtonNarrationText(builder);
     }
 
@@ -33,7 +33,7 @@ public class MiniMapWidget extends AbstractWidget {
     }
 
     @Override
-    public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
+    public void renderWidget(GuiGraphics matrixStack, int mouseX, int mouseY, float delta) {
         this.minimap.render(matrixStack, delta);
     }
 
@@ -51,17 +51,17 @@ public class MiniMapWidget extends AbstractWidget {
 
     @Override
     protected void onDrag(double mouseX, double mouseY, double deltaX, double deltaY) {
-        this.x = (int) (mouseX - clickX);
-        this.y = (int) (mouseY - clickY);
-        this.minimap.setCenter(this.x + this.minimap.getHalfSize(), this.y + this.minimap.getHalfSize(), true);
+        this.setX((int) (mouseX - clickX));
+        this.setY((int) (mouseY - clickY));
+        this.minimap.setCenter(this.getX() + this.minimap.getHalfSize(), this.getY() + this.minimap.getHalfSize(), true);
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         if (!Screen.hasControlDown()) {
-            this.minimap.addZoomLevel((int) amount);
+            this.minimap.addZoomLevel((int) scrollY);
         } else {
-            this.minimap.addSize(amount > 0 ? 16 : -16);
+            this.minimap.addSize(scrollY > 0 ? 16 : -16);
         }
         return true;
     }
