@@ -1,21 +1,16 @@
 package xyz.jpenilla.squaremap.client.gui.screen.widget;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import java.text.NumberFormat;
 import java.util.Locale;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.Widget;
-import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import xyz.jpenilla.squaremap.client.mixin.ToastAccess;
+import xyz.jpenilla.squaremap.client.mixin.AdvancementToastAccess;
 
-public class Coordinates extends GuiComponent implements Widget, GuiEventListener, NarratableEntry {
+public class Coordinates extends AbstractWidget {
     private static final NumberFormat NUMBER = NumberFormat.getInstance(Locale.US);
     private final FullMapWidget fullmap;
     private final int x;
@@ -24,6 +19,7 @@ public class Coordinates extends GuiComponent implements Widget, GuiEventListene
     private final int height;
 
     public Coordinates(FullMapWidget fullmap, int x, int y, int width, int height) {
+        super(x, y, width, height, null);
         this.fullmap = fullmap;
         this.x = x;
         this.y = y;
@@ -38,23 +34,14 @@ public class Coordinates extends GuiComponent implements Widget, GuiEventListene
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
+    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
         Minecraft minecraftClient = Minecraft.getInstance();
         Font textRenderer = minecraftClient.font;
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, ToastAccess.texture());
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.enableDepthTest();
         Component coordinates = getCoordinates(mouseX, mouseY);
         int w2 = (int) ((textRenderer.width(coordinates) + 20) / 2F);
         int h2 = (int) (this.height / 2F);
-        blit(matrixStack, x, y, w2, h2, 0, 0, w2, h2, 256, 256);
-        blit(matrixStack, x, y + h2, w2, h2, 0, 32 - h2, w2, h2, 256, 256);
-        blit(matrixStack, x + w2, y, w2, h2, 160 - w2, 0, w2, h2, 256, 256);
-        blit(matrixStack, x + w2, y + h2, w2, h2, 160 - w2, 32 - h2, w2, h2, 256, 256);
-        drawCenteredString(matrixStack, textRenderer, coordinates, this.x + w2, this.y + (this.height - 8) / 2, 0xffcccccc);
+        guiGraphics.blitSprite(AdvancementToastAccess.backgroundSprite(), x, y, w2 * 2, h2 * 2);
+        guiGraphics.drawCenteredString(textRenderer, coordinates, this.x + w2, this.y + (this.height - 8) / 2, 0xffcccccc);
     }
 
     @Override
@@ -63,6 +50,6 @@ public class Coordinates extends GuiComponent implements Widget, GuiEventListene
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput builder) {
+    public void updateWidgetNarration(NarrationElementOutput builder) {
     }
 }

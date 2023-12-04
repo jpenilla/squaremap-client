@@ -1,10 +1,9 @@
 package xyz.jpenilla.squaremap.client.gui.screen.widget;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.List;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.sounds.SoundManager;
@@ -14,7 +13,8 @@ import net.minecraft.util.Mth;
 import org.lwjgl.glfw.GLFW;
 import xyz.jpenilla.squaremap.client.config.options.IntegerOption;
 
-public class Slider extends AbstractWidget implements Tickable {
+// todo this is kind of broken in 1.20.2
+public class Slider extends AbstractSliderButton implements Tickable {
     private final Screen screen;
     private final IntegerOption option;
     private final double step;
@@ -22,7 +22,7 @@ public class Slider extends AbstractWidget implements Tickable {
     private int tooltipDelay;
 
     public Slider(Screen screen, int x, int y, int width, int height, IntegerOption option) {
-        super(x, y, width, height, option.getName());
+        super(x, y, width, height, option.getName(), option.getValue());
         this.screen = screen;
         this.option = option;
         this.step = option.getMin() / (double) option.getMax();
@@ -31,24 +31,27 @@ public class Slider extends AbstractWidget implements Tickable {
         updateMessage();
     }
 
+    /*
     @Override
     protected int getYImage(boolean hovered) {
         return 0;
     }
+     */
 
     @Override
-    public void updateNarration(NarrationElementOutput builder) {
+    public void updateWidgetNarration(NarrationElementOutput builder) {
         this.defaultButtonNarrationText(builder);
     }
 
     @Override
-    public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
-        super.renderButton(matrixStack, mouseX, mouseY, delta);
+    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+        super.renderWidget(guiGraphics, mouseX, mouseY, delta);
         if (this.isHoveredOrFocused() && this.tooltipDelay > 10) {
-            this.renderToolTip(matrixStack, mouseX, mouseY);
+            this.renderToolTip(guiGraphics, mouseX, mouseY);
         }
     }
 
+    /*
     @Override
     protected void renderBg(PoseStack matrixStack, Minecraft client, int mouseX, int mouseY) {
         RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
@@ -57,11 +60,11 @@ public class Slider extends AbstractWidget implements Tickable {
         this.blit(matrixStack, this.x + (int) (this.value * (double) (this.width - 8)), this.y, 0, 46 + i, 4, 20);
         this.blit(matrixStack, this.x + (int) (this.value * (double) (this.width - 8)) + 4, this.y, 196, 46 + i, 4, 20);
     }
+     */
 
-    @Override
-    public void renderToolTip(PoseStack matrixStack, int mouseX, int mouseY) {
+    public void renderToolTip(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         List<FormattedCharSequence> tooltip = Minecraft.getInstance().font.split(this.option.tooltip(), 200);
-        this.screen.renderTooltip(matrixStack, tooltip, mouseX, mouseY);
+        guiGraphics.renderTooltip(Minecraft.getInstance().font, tooltip, mouseX, mouseY);
     }
 
     @Override
@@ -86,7 +89,7 @@ public class Slider extends AbstractWidget implements Tickable {
     }
 
     private void setValueFromMouse(double mouseX) {
-        this.setValue((mouseX - (double) (this.x + 4)) / (double) (this.width - 8));
+        this.setValue((mouseX - (double) (this.getX() + 4)) / (double) (this.width - 8));
     }
 
     private void setValue(double value) {
@@ -125,8 +128,13 @@ public class Slider extends AbstractWidget implements Tickable {
         return Mth.clamp(value, this.option.getMin(), this.option.getMax());
     }
 
-    private void updateMessage() {
+    public void updateMessage() {
         setMessage(Component.literal(this.option.getName().getString() + ": " + this.option.getValue()));
+    }
+
+    @Override
+    protected void applyValue() {
+
     }
 
     @Override

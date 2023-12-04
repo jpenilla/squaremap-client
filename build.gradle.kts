@@ -1,11 +1,11 @@
 plugins {
-    id("quiet-fabric-loom") version "1.0-SNAPSHOT"
+    id("quiet-fabric-loom") version "1.4-SNAPSHOT"
 }
 
 group = "xyz.jpenilla.squaremap.client"
 version = "1.4.0-SNAPSHOT"
 
-val mcVersion = "1.19"
+val mcVersion = "1.20.2"
 
 java {
     toolchain {
@@ -14,23 +14,32 @@ java {
 }
 
 repositories {
-    maven("https://oss.sonatype.org/content/repositories/snapshots/") {
-        mavenContent { snapshotsOnly() }
-    }
+    mavenCentral()
     maven("https://maven.terraformersmc.com/") {
         mavenContent {
             includeGroup("com.terraformersmc")
+        }
+    }
+    maven("https://maven.parchmentmc.org/") {
+        mavenContent {
+            includeGroup("org.parchmentmc.data")
         }
     }
 }
 
 dependencies {
     minecraft("com.mojang:minecraft:$mcVersion")
-    mappings(loom.officialMojangMappings())
-    modImplementation("net.fabricmc:fabric-loader:0.14.8")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.56.1+1.19")
-    modImplementation("com.terraformersmc:modmenu:4.0.0")
-    modImplementation(include("ca.stellardrift", "confabricate", "3.0.0-SNAPSHOT"))
+    mappings(loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-1.20.2:2023.10.08@zip")
+    })
+    modImplementation("net.fabricmc:fabric-loader:0.15.0")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.91.0+1.20.2")
+    modImplementation("com.terraformersmc:modmenu:8.0.0")
+
+    val configurate = "org.spongepowered:configurate-hocon:4.1.2"
+    transitiveInclude(configurate)
+    modImplementation(configurate)
 }
 
 tasks {

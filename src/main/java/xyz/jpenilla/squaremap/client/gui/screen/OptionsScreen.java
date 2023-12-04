@@ -1,8 +1,8 @@
 package xyz.jpenilla.squaremap.client.gui.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.List;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
@@ -157,20 +157,20 @@ public class OptionsScreen extends AbstractScreen {
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
         int centerX = (int) (this.width / 2F);
 
         if (parent instanceof FullMapScreen) {
             int centerY = (int) (this.height / 2F);
-            this.parent.render(matrixStack, centerX, centerY, 0);
+            this.parent.render(guiGraphics, centerX, centerY, 0);
         }
 
-        super.render(matrixStack, mouseX, mouseY, delta);
+        super.render(guiGraphics, mouseX, mouseY, delta);
 
-        drawText(matrixStack, this.title, centerX, 15);
+        drawText(guiGraphics, this.title, centerX, 15);
 
-        drawText(matrixStack, RENDERER, centerX, 50);
-        drawText(matrixStack, MINIMAP, centerX, 95);
+        drawText(guiGraphics, RENDERER, centerX, 50);
+        drawText(guiGraphics, MINIMAP, centerX, 95);
     }
 
     @Override

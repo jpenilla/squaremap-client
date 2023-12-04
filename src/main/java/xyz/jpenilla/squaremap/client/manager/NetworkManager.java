@@ -25,7 +25,7 @@ public class NetworkManager {
 
     public void initialize() {
         ClientPlayNetworking.registerGlobalReceiver(this.channel, (client, handler, buf, responseSender) -> {
-            ByteArrayDataInput packet = in(buf.accessByteBufWithCorrectSize());
+            ByteArrayDataInput packet = in(buf);
             int packetType = packet.readInt();
             int protocol = packet.readInt();
             if (protocol != Constants.PROTOCOL) {
@@ -97,13 +97,13 @@ public class NetworkManager {
         }
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     private ByteArrayDataOutput out() {
         return ByteStreams.newDataOutput();
     }
 
-    @SuppressWarnings("UnstableApiUsage")
-    private ByteArrayDataInput in(byte[] bytes) {
-        return ByteStreams.newDataInput(bytes);
+    private ByteArrayDataInput in(FriendlyByteBuf buf) {
+        final byte[] copy = new byte[buf.readableBytes()];
+        buf.readBytes(copy);
+        return ByteStreams.newDataInput(copy);
     }
 }

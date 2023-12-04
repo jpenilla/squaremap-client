@@ -1,11 +1,11 @@
 package xyz.jpenilla.squaremap.client.gui.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import net.minecraft.Util;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
@@ -83,9 +83,9 @@ public class FullMapScreen extends AbstractScreen {
 
         this.confirmLink.clear();
         this.confirmLink.addAll(List.of(
-            new net.minecraft.client.gui.components.Button(this.width / 2 - 50 - 105, this.height / 6 + 96, 100, 20, OPEN, (button) -> openLink()),
-            new net.minecraft.client.gui.components.Button(this.width / 2 - 50, this.height / 6 + 96, 100, 20, COPY, (button) -> copyLink()),
-            new net.minecraft.client.gui.components.Button(this.width / 2 - 50 + 105, this.height / 6 + 96, 100, 20, CANCEL, (button) -> cancel())
+            net.minecraft.client.gui.components.Button.builder(OPEN, button -> openLink()).pos(this.width / 2 - 50 - 105, this.height / 6 + 96).size(100, 20).build(),
+            net.minecraft.client.gui.components.Button.builder(COPY, button -> copyLink()).pos(this.width / 2 - 50, this.height / 6 + 96).size(100, 20).build(),
+            net.minecraft.client.gui.components.Button.builder(CANCEL, button -> cancel()).pos(this.width / 2 - 50 + 105, this.height / 6 + 96).size(100, 20).build()
         ));
 
         // reverse the elements to draw bottom up and click top down
@@ -94,29 +94,29 @@ public class FullMapScreen extends AbstractScreen {
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
         if (this.background == null) {
-            renderBackground(matrixStack);
+            renderBackground(guiGraphics, mouseX, mouseY, delta);
         } else {
-            this.squaremap.getTextureManager().drawTexture(matrixStack, this.background, 0, 0, this.width, this.height, 0, 0, this.width / 512F, this.height / 512F);
+            this.squaremap.getTextureManager().drawTexture(guiGraphics.pose(), this.background, 0, 0, this.width, this.height, 0, 0, this.width / 512F, this.height / 512F);
         }
 
-        super.render(matrixStack, mouseX, mouseY, delta);
+        super.render(guiGraphics, mouseX, mouseY, delta);
 
-        drawText(matrixStack, this.title, (int) (this.width / 2F), 15);
+        drawText(guiGraphics, this.title, (int) (this.width / 2F), 15);
 
         if (openURL != null) {
-            this.fillGradient(matrixStack, 0, 0, this.width, this.height, 0xD00F4863, 0xC0370038);
-            drawCenteredString(matrixStack, this.font, LINK_CONFIRMATION, this.width / 2, 70, 16777215);
-            drawCenteredString(matrixStack, this.font, this.openURL, this.width / 2, 90, 16777215);
+            guiGraphics.fillGradient(0, 0, this.width, this.height, 0xD00F4863, 0xC0370038);
+            guiGraphics.drawCenteredString(this.font, LINK_CONFIRMATION, this.width / 2, 70, 16777215);
+            guiGraphics.drawCenteredString(this.font, this.openURL, this.width / 2, 90, 16777215);
             for (net.minecraft.client.gui.components.Button buttonWidget : this.confirmLink) {
-                buttonWidget.render(matrixStack, mouseX, mouseY, delta);
+                buttonWidget.render(guiGraphics, mouseX, mouseY, delta);
             }
         }
     }
 
     @Override
-    public void renderBackground(PoseStack matrixStack, int vOffset) {
+    public void renderBackground(GuiGraphics matrixStack, int i, int j, float f) {
         // don't waste cpu on super's background
     }
 

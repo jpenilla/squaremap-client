@@ -1,9 +1,9 @@
 package xyz.jpenilla.squaremap.client.gui.screen;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.HashMap;
 import java.util.Map;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import xyz.jpenilla.squaremap.client.SquaremapClientInitializer;
@@ -23,17 +23,17 @@ public abstract class AbstractScreen extends Screen {
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float delta) {
-        renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, delta);
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+        renderBackground(guiGraphics, mouseX, mouseY, delta);
+        super.render(guiGraphics, mouseX, mouseY, delta);
     }
 
     @Override
-    public void renderBackground(PoseStack matrixStack, int vOffset) {
+    public void renderBackground(GuiGraphics guiGraphics, int i, int j, float f) {
         if (this.minecraft != null && this.minecraft.level != null) {
-            this.fillGradient(matrixStack, 0, 0, this.width, this.height, 0xD00F4863, 0xC0370038);
+            guiGraphics.fillGradient(0, 0, this.width, this.height, 0xD00F4863, 0xC0370038);
         } else {
-            this.renderDirtBackground(vOffset);
+            this.renderDirtBackground(guiGraphics);
         }
     }
 
@@ -57,13 +57,13 @@ public abstract class AbstractScreen extends Screen {
         }
     }
 
-    protected void drawText(PoseStack matrixStack, String text, int x, int y) {
-        drawText(matrixStack, Component.nullToEmpty(text), x, y);
+    protected void drawText(GuiGraphics guiGraphics, String text, int x, int y) {
+        drawText(guiGraphics, Component.nullToEmpty(text), x, y);
     }
 
-    protected void drawText(PoseStack matrixStack, Component text, int x, int y) {
+    protected void drawText(GuiGraphics guiGraphics, Component text, int x, int y) {
         x = x - (int) (this.font.width(text) / 2F);
-        this.font.drawShadow(matrixStack, text, x, y, 0xFFFFFFFF);
+        guiGraphics.drawString(this.font, text, x, y, 0xFFFFFFFF, true);
     }
 
     public class KeyHandler extends Task {

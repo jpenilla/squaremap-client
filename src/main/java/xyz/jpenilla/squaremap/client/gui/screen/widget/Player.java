@@ -1,14 +1,16 @@
 package xyz.jpenilla.squaremap.client.gui.screen.widget;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.components.Widget;
-import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 
-public class Player implements Widget, GuiEventListener, NarratableEntry {
+public class Player extends AbstractWidget {
+    public Player() {
+        super(0, 0, 0, 0, null);
+    }
+
     @Override
-    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
+    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
     }
 
     @Override
@@ -17,6 +19,6 @@ public class Player implements Widget, GuiEventListener, NarratableEntry {
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput builder) {
+    public void updateWidgetNarration(NarrationElementOutput builder) {
     }
 }

@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.concurrent.CompletableFuture;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import org.lwjgl.opengl.GL11;
@@ -78,18 +78,20 @@ public class MiniMap {
     }
 
     public void initialize() {
-        HudRenderCallback.EVENT.register((matrixStack, delta) -> {
+        HudRenderCallback.EVENT.register((guiGraphics, delta) -> {
             if (!this.enabled || !this.visible) {
                 return;
             }
-            if (this.client.options.renderDebug) {
+            // todo
+            if (false) {
+            //if (this.client.options.debug) {
                 return;
             }
             // do not show minimap if no squaremap world set
             if (this.squaremap.getWorld() == null) {
                 return;
             }
-            this.render(matrixStack, delta);
+            this.render(guiGraphics, delta);
         });
     }
 
@@ -352,7 +354,8 @@ public class MiniMap {
         });
     }
 
-    public void render(PoseStack matrixStack, float delta) {
+    public void render(GuiGraphics guiGraphics, float delta) {
+        PoseStack matrixStack = guiGraphics.pose();
         TextureManager tex = this.squaremap.getTextureManager();
 
         // get fresh reference to player since vanilla destroys this object on dimension change
@@ -392,15 +395,14 @@ public class MiniMap {
         // on circle maps and prevents corners from extending beyond the frame on rotating square maps.
         RenderSystem.blendFuncSeparate(GL11.GL_ZERO, GL11.GL_ONE, GL11.GL_SRC_COLOR, GL11.GL_ZERO);
         {
-            RenderSystem.setShaderTexture(0, this.circular ? TextureManager.MASK_CIRCLE : TextureManager.MASK_SQUARE);
-            GuiComponent.blit(matrixStack, this.left - this.halfSize, this.top - this.halfSize, 0, 0, 0, this.doubleSize, this.doubleSize, this.doubleSize, this.doubleSize);
+            guiGraphics.blit(this.circular ? TextureManager.MASK_CIRCLE : TextureManager.MASK_SQUARE, this.left - this.halfSize, this.top - this.halfSize, 0, 0, 0, this.doubleSize, this.doubleSize, this.doubleSize, this.doubleSize);
         }
 
         // draw sky background - uses special blend which only writes where high alpha values exist from above
         RenderSystem.blendFunc(GL11.GL_DST_ALPHA, GL11.GL_ONE_MINUS_DST_ALPHA);
         {
             matrixStack.pushPose();
-            tex.drawTexture(matrixStack, tex.getTexture(this.player.level), x0 - halfScale, y0 + halfScale, x1 - halfScale, y1 + halfScale, u2, v2);
+            tex.drawTexture(matrixStack, tex.getTexture(this.player.level()), x0 - halfScale, y0 + halfScale, x1 - halfScale, y1 + halfScale, u2, v2);
             matrixStack.popPose();
         }
 
@@ -436,8 +438,7 @@ public class MiniMap {
 
         // draw the frame
         if (this.showFrame) {
-            RenderSystem.setShaderTexture(0, this.circular ? TextureManager.FRAME_CIRCLE : TextureManager.FRAME_SQUARE);
-            GuiComponent.blit(matrixStack, this.left, this.top, 0, 0, 0, this.size, this.size, this.size, this.size);
+            guiGraphics.blit(this.circular ? TextureManager.FRAME_CIRCLE : TextureManager.FRAME_SQUARE, this.left, this.top, 0, 0, 0, this.size, this.size, this.size, this.size);
         }
 
         // draw cardinal directions
@@ -456,19 +457,19 @@ public class MiniMap {
             {
                 matrixStack.pushPose();
                 matrixStack.translate(distance * sin(angle2 - 180), distance * cos(angle2 - 180), 0);
-                text(matrixStack, "N", dirX, dirY);
+                text(guiGraphics, "N", dirX, dirY);
                 matrixStack.popPose();
                 matrixStack.pushPose();
                 matrixStack.translate(distance * sin(angle2 + 90), distance * cos(angle2 + 90), 0);
-                text(matrixStack, "E", dirX, dirY);
+                text(guiGraphics, "E", dirX, dirY);
                 matrixStack.popPose();
                 matrixStack.pushPose();
                 matrixStack.translate(distance * sin(angle2), distance * cos(angle2), 0);
-                text(matrixStack, "S", dirX, dirY);
+                text(guiGraphics, "S", dirX, dirY);
                 matrixStack.popPose();
                 matrixStack.pushPose();
                 matrixStack.translate(distance * sin(angle2 - 90), distance * cos(angle2 - 90), 0);
-                text(matrixStack, "W", dirX, dirY);
+                text(guiGraphics, "W", dirX, dirY);
                 matrixStack.popPose();
             }
             matrixStack.popPose();
@@ -478,7 +479,7 @@ public class MiniMap {
         if (this.showCoordinates) {
             matrixStack.pushPose();
             matrixStack.scale(this.textScale, this.textScale, this.textScale);
-            text(matrixStack, String.format("%s, %s, %s", (int) Math.floor(this.player.getX()), (int) Math.floor(this.player.getY()), (int) Math.floor(this.player.getZ())), this.textX, this.textZ + 8);
+            text(guiGraphics, String.format("%s, %s, %s", (int) Math.floor(this.player.getX()), (int) Math.floor(this.player.getY()), (int) Math.floor(this.player.getZ())), this.textX, this.textZ + 8);
             matrixStack.popPose();
         }
 
@@ -488,10 +489,10 @@ public class MiniMap {
         matrixStack.popPose();
     }
 
-    private void text(PoseStack matrixStack, String text, int x, int y) {
+    private void text(GuiGraphics guiGraphics, String text, int x, int y) {
         x -= (int) (this.client.font.width(text) / 2F);
-        this.client.font.draw(matrixStack, text, x + 1, y + 1, 0xFF3F3F3F);
-        this.client.font.draw(matrixStack, text, x, y, 0xFFFFFFFF);
+        guiGraphics.drawString(Minecraft.getInstance().font, text, x + 1, y + 1, 0xFF3F3F3F);
+        guiGraphics.drawString(Minecraft.getInstance().font, text, x, y, 0xFFFFFFFF);
     }
 
     private float cos(float degree) {

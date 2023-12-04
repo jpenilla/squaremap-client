@@ -1,7 +1,7 @@
 package xyz.jpenilla.squaremap.client.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 
 public final class Util {
     private Util() {
@@ -14,7 +14,7 @@ public final class Util {
 
     public static void rotateScene(final PoseStack matrixStack, final double x, final double y, final float degrees) {
         matrixStack.translate(x, y, 0);
-        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(degrees));
+        matrixStack.mulPose(Axis.ZP.rotationDegrees(degrees));
         matrixStack.translate(-x, -y, 0);
     }
 }
